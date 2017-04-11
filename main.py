@@ -27,7 +27,8 @@ def runAlgorithm(family):
 def runForAll(familyType):
 	taxa = hf.getAllTaxa()
 	for x in range(len(taxa)):
-		if familyType in taxa[x]:
+		if familyType[0] in taxa[x]:
+			print '--- Running for {}. ---'.format(taxa[x])
 			runAlgorithm([taxa[x]])
 
 options = {
