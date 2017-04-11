@@ -1,4 +1,5 @@
 import redis
+import ast
 
 
 taxaClient = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -30,12 +31,17 @@ def buildSigmaDB(keys):
 	return True
 
 def getTaxaFamilySigma(family):
-	strains =  taxaClient.get(family)
+	strains =  ast.literal_eval(taxaClient.get(family))
 	pipe = sigmaClient.pipeline()
 	for strain in range(len(strains)):
 		pipe.get(strains[strain])
 
-	answer = list(set(pipe.execute()))
+	get = (pipe.execute())
+	answer = []
+	for i in range(len(get)):
+		array = ast.literal_eval(get[i])
+		answer.extend(array[x] for x in range(len(array)) if array[x] not in answer)
+
 	return answer
 
 def buildStringDB(keys):
@@ -49,3 +55,18 @@ def buildStringDB(keys):
 
 	pipe.execute()
 	return True
+
+def getTaxaFamilyStrings(family):
+	strains =  ast.literal_eval(taxaClient.get(family))
+	strings = []
+	for strain in range(len(strains)):
+		match = '*#' + strains[strain]
+		for key in stringClient.scan_iter(match=match):
+			string = {
+				'id': strains[strain],
+				'name': key,
+				'string': stringClient.get(key)
+			}
+			strings.append(string)
+
+	return strings

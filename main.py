@@ -1,12 +1,17 @@
 import sys
+from datetime import datetime
 from algorithm import Algorithm
 import Preprocess as pp
 import HelperFunctions as hf
 
 
 def runAlgorithm(family):
-	sigma = hf.getFamilySigma(family)
-	strings = hf.getFamilyStrings(family)
+	start = datetime.now()
+	sigma = hf.getFamilySigma(family[0])
+	print 'Sigma size is: {}.'.format(len(sigma))
+	strings = hf.getFamilyStrings(family[0])
+	print 'Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start)
+
 	algorithm = Algorithm(sigma, strings)
 	algorithm.run()
 

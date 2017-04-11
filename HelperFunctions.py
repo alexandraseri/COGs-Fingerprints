@@ -22,14 +22,14 @@ def analyzeSigmaLine(line):
 def analyzeStringLine(line):
 	lineArray = line.split()
 	key = lineArray[0]
-	value = lineArray[1:].join(';')
+	value = ';'.join(lineArray[1:])
 	return {'key': key, 'value': value}
 
 def getFamilySigma(family):
 	return db.getTaxaFamilySigma(family)
 
 def getFamilyStrings(family):
-	pass
+	return db.getTaxaFamilyStrings(family)
 
 def createLife(string, sigma):
 	life = {
