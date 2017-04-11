@@ -1,11 +1,14 @@
 import sys
 from algorithm import Algorithm
 import Preprocess as pp
+import HelperFunctions as hf
 
 
 def runAlgorithm(family):
-
-	pass
+	sigma = hf.getFamilySigma(family)
+	strings = hf.getFamilyStrings(family)
+	algorithm = Algorithm(sigma, strings)
+	algorithm.run()
 
 options = {
 	'-pTaxa': {

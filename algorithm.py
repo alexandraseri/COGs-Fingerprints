@@ -1,57 +1,52 @@
-from pytrie import SortedStringTrie as Trie
-
+import HelperFunctions as hf
 
 class Algorithm:
-	def __init__(self, size, string):
-		self.sigmaSize = size
-		self.string = string
-		self.stringLength = len(string)
-		self.trie = Trie()
+	def __init__(self, sigma, strings):
+		self.sigma = sigma
+		self.stringList = strings
+		self.fingerPrints = {}
 
 	def run(self):
-		for k in range(self.stringLength):
-			self.initialize(k+1)
+		for i in range(len(self.stringList)):
+			string = self.stringList[i]
+			for k in range(len(string['string'])):
+				self.initialize(k+1, string)
 
-	def initialize(self, k):
+	def initialize(self, k, string):
 		left = 1
 		right = 0
 		number = 0
-		counter = [0 for x in range(self.sigmaSize + 1)]
-		life = [0 for x in range(self.sigmaSize + 1)]
-
-		while number < k and right < self.stringLength:
+		life = hf.createLife(string['id'], self.sigma)
+		while number < k and right < len(string['string']):
 			right += 1
-			index = int(self.string[right-1])
-			counter[index] += 1
-			if counter[index] == 1:
+			letter = string['string'][right-1]
+			life['letters'][letter] += 1
+			if life['letters'][letter] == 1:
 				number += 1
-				life[index] = 1
 
-		if right == self.stringLength and number < k:
+		if right == len(string['string']) and number < k:
 			return
 
 		self.handle_fingerprint(life)
-		self.main(k, number, right, left, counter, life)
+		self.main(string, k, number, right, left, life)
 
-	def main(self, k, number, right, left, counter, life):
-		while right < self.stringLength:
-			while number < k + 1 and right < self.stringLength:
+	def main(self, string, k, number, right, left, life):
+		while right < len(string['string']):
+			while number < k + 1 and right < len(string['string']):
 				right += 1
-				index = int(self.string[right-1])
-				counter[index] += 1
-				if counter[index] == 1:
+				letter = string['string'][right-1]
+				life['letters'][letter] += 1
+				if life['letters'][letter] == 1:
 					number += 1
-					life[index] = 1
 
-			if right == self.stringLength and number <= k:
+			if right == len(string['string']) and number <= k:
 				return
 
 			while number > k:
-				index = int(self.string[left-1])
-				counter[index] -= 1
-				if counter[index] == 0:
+				letter = string['string'][left-1]
+				life['letters'][letter] -= 1
+				if life['letters'][letter] == 0:
 					number -= 1
-					life[index] = 0
 
 				left += 1
 
@@ -59,19 +54,21 @@ class Algorithm:
 			self.handle_fingerprint(life)
 
 	def handle_fingerprint(self, life):
-		fingerprint = ''
-		for x in range(self.sigmaSize + 1):
-			if life[x] == 1:
-				fingerprint += str(x)
+		fingerprint = []
+		letters =life['letters'].keys()
+		for letter in letters:
+			if life['letters'][letter] > 0 :
+				fingerprint.append(letter)
 
-		if fingerprint in self.trie.keys():
-			self.trie[[fingerprint]] += 1
+		key = fingerprint.join(';')
+		if key not in self.fingerPrints:
+			self.fingerPrints[key] = []
 
-		else:
-			self.trie[[fingerprint]] = 1
+		self.fingerPrints[key].append(life['string'])
 
 	def print_fingerprints(self):
-		print(self.trie)
+		for key in self.fingerPrints.keys():
+			print '----> fingerprint: {} \n --------> in strings: {}. \n\n'.format(key, self.fingerPrints[key].join(', '))
 
 
 

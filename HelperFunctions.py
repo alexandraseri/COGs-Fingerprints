@@ -1,4 +1,5 @@
 import Consts as consts
+import RedisDB as db
 
 
 def buildRedisKey(index, name):
@@ -17,3 +18,19 @@ def analyzeSigmaLine(line):
 	lineArray = line.split()
 	key = lineArray[0].split('#')[-1]
 	return {'key': key, 'value': lineArray[1:]}
+
+def getFamilySigma(family):
+	return db.getTaxaFamilySigma(family)
+
+def getFamilyStrings(family):
+	pass
+
+def createLife(string, sigma):
+	life = {
+		'string': string
+		'letters': {}
+	}
+	for i in range(len(sigma)):
+		life['letters'][sigma[i]] = 0
+
+	return life

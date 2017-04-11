@@ -27,3 +27,12 @@ def buildSigmaDB(keys):
 
 	pipe.execute()
 	return True
+
+def getTaxaFamilySigma(family):
+	strains =  taxaClient.get(family)
+	pipe = sigmaClient.pipeline()
+	for strain in range(len(strains)):
+		pipe.get(strains[strain])
+
+	answer = list(set(pipe.execute()))s
+	return answer
