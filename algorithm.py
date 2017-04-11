@@ -16,7 +16,7 @@ class Algorithm:
 		left = 1
 		right = 0
 		number = 0
-		life = hf.createLife(string['id'], self.sigma)
+		life = hf.createLife(string['name'], self.sigma)
 		while number < k and right < len(string['string'].split(';')):
 			right += 1
 			letter = string['string'].split(';')[right-1]
@@ -67,8 +67,10 @@ class Algorithm:
 		self.fingerPrints[key].append(life['string'])
 
 	def print_fingerprints(self):
-		for key in self.fingerPrints.keys():
-			print '----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(self.fingerPrints[key]))
+		with open('fingerprints.txt','w+') as file:
+			for key in self.fingerPrints.keys():
+				strings = self.fingerPrints[key].sort()
+				file.write('----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(strings)))
 
 
 
