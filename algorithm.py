@@ -69,8 +69,7 @@ class Algorithm:
 	def print_fingerprints(self):
 		with open('fingerprints.txt','w+') as file:
 			for key in self.fingerPrints.keys():
-				strings = self.fingerPrints[key].sort()
-				file.write('----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(strings)))
+				file.write('----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(self.fingerPrints[key])))
 
 
 
