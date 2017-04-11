@@ -13,7 +13,10 @@ def runAlgorithm(family):
 	print 'Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start)
 
 	algorithm = Algorithm(sigma, strings)
+	start = datetime.now()
 	algorithm.run()
+	print 'Algorithm runtime: {}.'.format(datetime.now() - start)
+	algorithm.print_fingerprints()
 
 options = {
 	'-pTaxa': {
