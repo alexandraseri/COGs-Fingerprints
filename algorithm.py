@@ -2,7 +2,8 @@ import HelperFunctions as hf
 import Postprocess as post
 
 class Algorithm:
-	def __init__(self, sigma, strings):
+	def __init__(self, sigma, strings, family):
+		self.family = family
 		self.sigma = sigma
 		self.stringList = strings
 		self.fingerPrints = {}
@@ -70,11 +71,11 @@ class Algorithm:
 		self.fingerPrints[key].append(life['string'])
 
 	def print_fingerprints(self):
-		with open('fingerprints.txt','w+') as file:
+		with open('results/' + self.family + '_fingerprints.txt','w+') as file:
 			for key in self.fingerPrints.keys():
 				file.write('----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(self.fingerPrints[key])))
 
 	def postProcessThreshold(self, threshold):
 		minNumber = threshold * len(self.stringList)
-		post.getAboveThreshold(threshold, minNumber, self.fingerPrints)
+		post.getAboveThreshold(threshold, minNumber, self.fingerPrints, self.family)
 

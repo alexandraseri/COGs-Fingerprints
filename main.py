@@ -12,7 +12,7 @@ def runAlgorithm(family):
 	strings = hf.getFamilyStrings(family[0])
 	print 'Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start)
 
-	algorithm = Algorithm(sigma, strings)
+	algorithm = Algorithm(sigma, strings, family[0])
 	start = datetime.now()
 	algorithm.run()
 	print 'Algorithm runtime: {}.'.format(datetime.now() - start)
@@ -67,15 +67,4 @@ if __name__ == "__main__":
 
 						if third and len(args[first['numOfArgs'] + second['numOfArgs'] + 2]) > third['numOfArgs']:
 							options[args[first['numOfArgs'] + second['numOfArgs'] + 2]]['function'](args[first['numOfArgs'] + second['numOfArgs'] + 3:first['numOfArgs'] + second['numOfArgs'] + third['numOfArgs'] + 2])
-
-	# else:
-	# 	# Assumption: SIGMA = {1....|SIGMA|}
-	# 	string = str(sys.argv[1])
-	# 	size = sizeOfSigma(string)
-	# 	print('Sigma size is {} and string is {}'.format(size, string))
-	#
-	# 	# Run Algorithm
-	# 	algorithm = Algorithm(size, string)
-	# 	algorithm.run()
-	# 	algorithm.print_fingerprints()
 

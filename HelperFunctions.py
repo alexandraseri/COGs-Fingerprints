@@ -3,7 +3,7 @@ import RedisDB as db
 
 
 def buildRedisKey(index, name):
-	return consts.redisPrefixWords[index] + name
+	return (consts.redisPrefixWords[index] + name).rstrip()
 
 def analyzeTaxaLine(line):
 	lineArray = line.split(',') #Splits into: Kingdom, phylum, class, genus, species, bacteria, strain_id, bacgroup, order
