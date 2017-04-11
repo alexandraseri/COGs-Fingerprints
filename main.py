@@ -66,15 +66,4 @@ if __name__ == "__main__":
 		if first and len(args) > first['numOfArgs']:
 			options[args[0]]['function'](args[1:first['numOfArgs'] + 1])
 
-			if len(args) > first['numOfArgs'] + 1:
-				second = argInOption(args[first['numOfArgs'] + 1])
-
-				if second and len(args[first['numOfArgs'] + 1:]) > second['numOfArgs']:
-					options[args[first['numOfArgs'] + 1]]['function'](args[first['numOfArgs'] + 2:first['numOfArgs'] + second['numOfArgs'] + 2])
-
-					if len(args) > first['numOfArgs'] + second['numOfArgs'] + 2:
-						third =	argInOption(args[first['numOfArgs'] + second['numOfArgs'] + 2])
-
-						if third and len(args[first['numOfArgs'] + second['numOfArgs'] + 2]) > third['numOfArgs']:
-							options[args[first['numOfArgs'] + second['numOfArgs'] + 2]]['function'](args[first['numOfArgs'] + second['numOfArgs'] + 3:first['numOfArgs'] + second['numOfArgs'] + third['numOfArgs'] + 2])
 
