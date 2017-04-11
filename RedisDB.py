@@ -18,6 +18,14 @@ def buildTaxaDB(keys):
 	pipe.execute()
 	return True
 
+
+def getTaxaDB():
+	taxa = []
+	for key in taxaClient.scan_iter():
+		taxa.append(key)
+
+	return taxa
+
 def buildSigmaDB(keys):
 	# Flush current contents of sigma DB
 	sigmaClient.flushdb()

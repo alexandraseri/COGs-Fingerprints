@@ -24,6 +24,12 @@ def runAlgorithm(family):
 	algorithm.postProcessThreshold(0.1)
 	algorithm.postProcessThreshold(0.05)
 
+def runForAll(familyType):
+	taxa = hf.getAllTaxa()
+	for x in range(len(taxa)):
+		if familyType in taxa[x]:
+			runAlgorithm([taxa[x]])
+
 options = {
 	'-pTaxa': {
 		'function': pp.preprocessTaxa,
@@ -35,6 +41,10 @@ options = {
 	},
 	'-r': {
 		'function': runAlgorithm,
+		'numOfArgs': 1
+	},
+	'-t': {
+		'function': runForAll,
 		'numOfArgs': 1
 	}
 }

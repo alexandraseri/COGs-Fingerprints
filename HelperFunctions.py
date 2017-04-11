@@ -40,3 +40,6 @@ def createLife(string, sigma):
 		life['letters'][sigma[i]] = 0
 
 	return life
+
+def getAllTaxa():
+	return db.getTaxaDB()
