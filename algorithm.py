@@ -1,4 +1,5 @@
 import HelperFunctions as hf
+import Postprocess as post
 
 class Algorithm:
 	def __init__(self, sigma, strings):
@@ -73,6 +74,7 @@ class Algorithm:
 			for key in self.fingerPrints.keys():
 				file.write('----> fingerprint: {} \n --------> in strings: {}. \n'.format(key, ', '.join(self.fingerPrints[key])))
 
-
-
+	def postProcessThreshold(self, threshold):
+		minNumber = threshold * len(self.stringList)
+		post.getAboveThreshold(threshold, minNumber, self.fingerPrints)
 

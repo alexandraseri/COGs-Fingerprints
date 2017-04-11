@@ -17,6 +17,12 @@ def runAlgorithm(family):
 	algorithm.run()
 	print 'Algorithm runtime: {}.'.format(datetime.now() - start)
 	algorithm.print_fingerprints()
+	algorithm.postProcessThreshold(0.8)
+	algorithm.postProcessThreshold(0.5)
+	algorithm.postProcessThreshold(0.3)
+	algorithm.postProcessThreshold(0.2)
+	algorithm.postProcessThreshold(0.1)
+	algorithm.postProcessThreshold(0.05)
 
 options = {
 	'-pTaxa': {
