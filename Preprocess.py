@@ -4,6 +4,23 @@ import RedisDB as db
 import HelperFunctions as hf
 
 
+def preprocessStrings(fileName):
+	start = datetime.now()
+	with open(fileName, 'r') as file:
+		lines = file.readlines()
+		data = []
+		for line in lines:
+			data.append(hf.analyzeStringLine(line))
+
+		redisKeys = {}
+		for i in range(len(data)):
+			redisKeys[data[i]['key']] = data[i]['value']
+
+		answer = db.buildStringDB(redisKeys)
+		timedelta = datetime.now() - start
+		if answer is True:
+			print 'String DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
+
 def preprocessTaxa(fileName):
 	start = datetime.now()
 	with open(fileName[0], 'r') as file:
@@ -25,7 +42,7 @@ def preprocessTaxa(fileName):
 		if answer is True:
 			print 'Taxa DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
 
-def preproccessSigma(fileName):
+def preprocessSigma(fileName):
 	start = datetime.now()
 	with open(fileName[0], 'r') as file:
 		lines = file.readlines()
@@ -44,3 +61,4 @@ def preproccessSigma(fileName):
 		timedelta = datetime.now() - start
 		if answer is True:
 			print 'Sigma DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
+			preprocessStrings(fileName[0])

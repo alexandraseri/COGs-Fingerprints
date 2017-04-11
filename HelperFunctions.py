@@ -19,6 +19,12 @@ def analyzeSigmaLine(line):
 	key = lineArray[0].split('#')[-1]
 	return {'key': key, 'value': lineArray[1:]}
 
+def analyzeStringLine(line):
+	lineArray = line.split()
+	key = lineArray[0]
+	value = lineArray[1:].join(';')
+	return {'key': key, 'value': value}
+
 def getFamilySigma(family):
 	return db.getTaxaFamilySigma(family)
 
@@ -27,7 +33,7 @@ def getFamilyStrings(family):
 
 def createLife(string, sigma):
 	life = {
-		'string': string
+		'string': string,
 		'letters': {}
 	}
 	for i in range(len(sigma)):

@@ -16,7 +16,7 @@ options = {
 		'numOfArgs': 1
 	},
 	'-pSigma': {
-		'function': pp.preproccessSigma,
+		'function': pp.preprocessSigma,
 		'numOfArgs': 1
 	},
 	'-r': {
