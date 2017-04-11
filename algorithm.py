@@ -60,6 +60,8 @@ class Algorithm:
 			if life['letters'][letter] > 0 :
 				fingerprint.append(letter)
 
+		fingerprint.sort()
+
 		key = ';'.join(fingerprint)
 		if key not in self.fingerPrints:
 			self.fingerPrints[key] = []
