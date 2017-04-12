@@ -39,16 +39,18 @@ def buildSigmaDB(keys):
 	return True
 
 def getTaxaFamilySigma(family):
-	strains =  ast.literal_eval(taxaClient.get(family))
-	pipe = sigmaClient.pipeline()
-	for strain in range(len(strains)):
-		pipe.get(strains[strain])
-
-	get = (pipe.execute())
+	taxaString = taxaClient.get(family)
 	answer = []
-	for i in range(len(get)):
-		array = ast.literal_eval(get[i])
-		answer.extend(array[x] for x in range(len(array)) if array[x] not in answer)
+	if(taxaString):
+		strains =  ast.literal_eval(taxaString)
+		pipe = sigmaClient.pipeline()
+		for strain in range(len(strains)):
+			pipe.get(strains[strain])
+
+		get = (pipe.execute())
+		for i in range(len(get)):
+			array = ast.literal_eval(get[i])
+			answer.extend(array[x] for x in range(len(array)) if array[x] not in answer)
 
 	return answer
 
@@ -65,16 +67,18 @@ def buildStringDB(keys):
 	return True
 
 def getTaxaFamilyStrings(family):
-	strains =  ast.literal_eval(taxaClient.get(family))
+	taxaString = taxaClient.get(family)
 	strings = []
-	for strain in range(len(strains)):
-		match = '*#' + strains[strain]
-		for key in stringClient.scan_iter(match=match):
-			string = {
-				'id': strains[strain],
-				'name': key,
-				'string': stringClient.get(key)
-			}
-			strings.append(string)
+	if(taxaString):
+		strains =  ast.literal_eval(taxaString)
+		for strain in range(len(strains)):
+			match = '*#' + strains[strain]
+			for key in stringClient.scan_iter(match=match):
+				string = {
+					'id': strains[strain],
+					'name': key,
+					'string': stringClient.get(key)
+				}
+				strings.append(string)
 
 	return strings
