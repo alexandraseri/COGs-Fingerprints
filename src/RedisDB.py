@@ -48,8 +48,8 @@ def getTaxaFamilySigma(family):
 			pipe.get(strains[strain])
 
 		get = (pipe.execute())
-		if(get):
-			for i in range(len(get)):
+		for i in range(len(get)):
+			if get[i] and len(get[i]) > 0:
 				array = ast.literal_eval(get[i])
 				answer.extend(array[x] for x in range(len(array)) if array[x] not in answer)
 
