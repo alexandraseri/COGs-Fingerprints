@@ -1,21 +1,22 @@
 import sys
 from datetime import datetime
-from algorithm import Algorithm
+
 import Preprocess as pp
-import HelperFunctions as hf
+from lib import HelperFunctions as hf
+from lib.algorithm import Algorithm
 
 
 def runAlgorithm(family):
 	start = datetime.now()
 	sigma = hf.getFamilySigma(family[0])
-	print 'Sigma size is: {}.'.format(len(sigma))
+	print('Sigma size is: {}.'.format (len (sigma)))
 	strings = hf.getFamilyStrings(family[0])
-	print 'Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start)
+	print('Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start))
 
 	algorithm = Algorithm(sigma, strings, family[0])
 	start = datetime.now()
 	algorithm.run()
-	print 'Algorithm runtime: {}.'.format(datetime.now() - start)
+	print('Algorithm runtime: {}.'.format(datetime.now() - start))
 	algorithm.print_fingerprints()
 	algorithm.postProcessThreshold(0.8)
 	algorithm.postProcessThreshold(0.5)
@@ -28,7 +29,7 @@ def runForAll(familyType):
 	taxa = hf.getAllTaxa()
 	for x in range(len(taxa)):
 		if familyType[0] in taxa[x]:
-			print '--- Running for {}. ---'.format(taxa[x])
+			print('--- Running for {}. ---'.format(taxa[x]))
 			runAlgorithm([taxa[x]])
 
 options = {
@@ -52,14 +53,14 @@ options = {
 
 def argInOption(arg):
 	if arg not in options:
-		print 'You have to provide a valid option: {}. You provided {}.'.format(options.keys().join(', '), arg)
+		print('You have to provide a valid option: {}. You provided {}.'.format(options.keys().join(', '), arg))
 		return False
 
 	return options[arg]
 
 if __name__ == "__main__":
 	if len(sys.argv) < 2:
-		print 'Not enough arguments!'
+		print('Not enough arguments!')
 
 	else:
 		args = sys.argv[1:]

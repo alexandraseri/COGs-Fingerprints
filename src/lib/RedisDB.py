@@ -1,16 +1,26 @@
 import redis
 import ast
 
-
+""" Taxa redis client """
 taxaClient = redis.StrictRedis(host='localhost', port=6379, db=0)
+
+""" Sigma redis client """
 sigmaClient = redis.StrictRedis(host='localhost', port=6379, db=1)
+
+""" Strings redis client """
 stringClient = redis.StrictRedis(host='localhost', port=6379, db=2)
 
-def buildTaxaDB(keys):
-	# Flush current contents of taxa DB
-	taxaClient.flushdb()
+""" Strains redis client """
+strainClient = redis.StrictRedis(host='localhost', port=6379, db=3)
 
-	#insert new taxa DB
+def buildTaxaDB(keys):
+	"""
+	Construct taxaDB in redis.
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
+	taxaClient.flushdb() 	# Flush existing contents of taxa DB
+
 	pipe = taxaClient.pipeline()
 	for key in keys:
 		pipe.set(key, keys[key])
@@ -20,6 +30,10 @@ def buildTaxaDB(keys):
 
 
 def getTaxaDB():
+	"""
+	Return all keys of taxaDB
+	:return: an array of keys from taxaDB.
+	"""
 	taxa = []
 	for key in taxaClient.scan_iter():
 		taxa.append(key)
@@ -27,10 +41,13 @@ def getTaxaDB():
 	return taxa
 
 def buildSigmaDB(keys):
-	# Flush current contents of sigma DB
-	sigmaClient.flushdb()
+	"""
+	Construct sigmaDB in redis.
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
+	sigmaClient.flushdb() # Flush existing contents of sigma DB
 
-	#insert new sigma DB
 	pipe = sigmaClient.pipeline()
 	for key in keys:
 		pipe.set(key, keys[key])
@@ -39,6 +56,11 @@ def buildSigmaDB(keys):
 	return True
 
 def getTaxaFamilySigma(family):
+	"""
+	Get the sigma associated with the requested family.
+	:param family: the requested family.
+	:return: an array of sigma as requested.
+	"""
 	taxaString = taxaClient.get(family)
 	answer = []
 	if(taxaString):
@@ -56,10 +78,14 @@ def getTaxaFamilySigma(family):
 	return answer
 
 def buildStringDB(keys):
-	# Flush current contents of strings DB
-	stringClient.flushdb()
+	"""
+	Construct sigmaDB in redis.
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
 
-	#insert new string DB
+	stringClient.flushdb() # Flush existing contents of strings DB
+
 	pipe = stringClient.pipeline()
 	for key in keys:
 		pipe.set(key, keys[key])
@@ -68,10 +94,15 @@ def buildStringDB(keys):
 	return True
 
 def getTaxaFamilyStrings(family):
+	"""
+	Get the strings associated with the requested family.
+	:param family: the requested family.
+	:return: an array of strings.
+	"""
 	taxaString = taxaClient.get(family)
 	strings = []
-	if(taxaString):
-		strains =  ast.literal_eval(taxaString)
+	if taxaString and len(taxaString) > 0:
+		strains = ast.literal_eval(taxaString)
 		for strain in range(len(strains)):
 			match = '*#' + strains[strain]
 			for key in stringClient.scan_iter(match=match):

@@ -1,10 +1,14 @@
 from datetime import datetime
 
-import RedisDB as db
-import HelperFunctions as hf
+from lib import HelperFunctions as hf
+from lib import RedisDB as db
 
 
 def preprocessStrings(fileName):
+	"""
+	Preprocess strings data.
+	:param fileName: the file containing the strings.
+	"""
 	start = datetime.now()
 	with open(fileName, 'r') as file:
 		lines = file.readlines()
@@ -19,9 +23,14 @@ def preprocessStrings(fileName):
 		answer = db.buildStringDB(redisKeys)
 		timedelta = datetime.now() - start
 		if answer is True:
-			print 'String DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
+			print('String DB was built successfully from file {} in {}.'.format (fileName[0], timedelta))
+
 
 def preprocessTaxa(fileName):
+	"""
+	Preprocess taxa data.
+	:param fileName: the file containing the taxa.
+	"""
 	start = datetime.now()
 	with open(fileName[0], 'r') as file:
 		lines = file.readlines()
@@ -40,9 +49,13 @@ def preprocessTaxa(fileName):
 		answer = db.buildTaxaDB(redisKeys)
 		timedelta = datetime.now() - start
 		if answer is True:
-			print 'Taxa DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
+			print('Taxa DB was built successfully from file {} in {}.'.format(fileName[0], timedelta))
 
 def preprocessSigma(fileName):
+	"""
+	Preprocess sigma data.
+	:param fileName: the file containing the sigma data.
+	"""
 	start = datetime.now()
 	with open(fileName[0], 'r') as file:
 		lines = file.readlines()
@@ -60,5 +73,5 @@ def preprocessSigma(fileName):
 		answer = db.buildSigmaDB(redisKeys)
 		timedelta = datetime.now() - start
 		if answer is True:
-			print 'Sigma DB was built successfully from file {} in {}.'.format(fileName[0], timedelta)
+			print('Sigma DB was built successfully from file {} in {}.'.format(fileName[0], timedelta))
 			preprocessStrings(fileName[0])
