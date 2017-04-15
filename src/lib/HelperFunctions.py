@@ -104,7 +104,7 @@ def argInOption(arg, options):
 	:return: if is an option, return a function, else, returns false.
 	"""
 	if arg not in options:
-		print('You have to provide a valid option: {}. You provided {}.'.format(options.keys().join(', '), arg))
+		print('You have to provide a valid option: {}. You provided {}.'.format(', '.join(options.keys()), arg))
 		return False
 
 	return options[arg]
@@ -121,9 +121,9 @@ def getFingerprints(file):
 	fingerprint = ''
 	for line in lines:
 		if 'fingerprint' in line:
-			fingerprint = line.split(': ')[1]
+			fingerprint = line.split(': ')[1].rstrip()
 		elif 'strings' in line:
-			fingerprints[fingerprint] = line.split(': ')[1].split(', ')
+			fingerprints[fingerprint] = line.split(': ')[1].rstrip().split(', ')
 
 	return fingerprints
 
@@ -137,8 +137,8 @@ def getAboveThreshold(threshold, family, strings, fingerprints):
 	:param fingerprints: the fingerprints object
 	"""
 	minNumber = len(strings) * threshold
-	with open('results/' + family + '_fingerprint_' + str(threshold) + '.txt', 'w+') as file:
+	with open('../results/' + family + '_fingerprint_' + str(threshold) + '.txt', 'w+') as file:
 		for key in fingerprints.keys():
 			if len(fingerprints[key]) > minNumber:
-				file.write('--- Fingerprint: {} \n------in strings: {}. \n'.format(key, ', '.join(fingerprints[key])))
+				file.write('--- Fingerprint: {} \n------in strings: {} \n'.format(key, ', '.join(fingerprints[key])))
 

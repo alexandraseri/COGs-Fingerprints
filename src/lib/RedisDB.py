@@ -105,14 +105,37 @@ def getTaxaFamilyStrings(family):
 	strings = []
 	if taxaString and len(taxaString) > 0:
 		strains = ast.literal_eval(taxaString)
+		pipe = strainClient.pipeline()
 		for strain in range(len(strains)):
-			match = '*#' + strains[strain]
-			for key in stringClient.scan_iter(match=match):
-				string = {
-					'id': strains[strain],
-					'name': key,
-					'string': stringClient.get(key)
-				}
-				strings.append(string)
+			pipe.get(strains[strain])
+
+		get = (pipe.execute())
+		for i in range(len(get)):
+			if get[i] and len(get[i]) > 0:
+				stringsArray = ast.literal_eval(get[i])
+				for j in range(len(stringsArray)):
+					string = {
+						'id': stringsArray[j].split('#')[-1],
+						'name': stringsArray[j],
+						'string': stringClient.get(stringsArray[j])
+					}
+
+					strings.append(string)
 
 	return strings
+
+
+def buildStrainsDB(keys):
+	"""
+	Construct strainsDB in redis.
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
+	strainClient.flushdb() # Flush existing contents of strains DB
+
+	pipe = strainClient.pipeline()
+	for key in keys:
+		pipe.set(key, keys[key])
+
+	pipe.execute()
+	return True

@@ -14,17 +14,17 @@ def runAlgorithm(family):
 	start = datetime.now()
 
 	# Get sigma
-	sigma = hf.getFamilySigma(family[0])
-	print('Sigma size is: {}.'.format (len (sigma)))
+	sigma = hf.getFamilySigma(family)
+	print('Sigma size is: {}.'.format(len(sigma)))
 
 	# Get strings
-	strings = hf.getFamilyStrings(family[0])
+	strings = hf.getFamilyStrings(family)
 	print('Total number of strings is: {}.\nGot info for running algorithm in {}.'.format(len(strings), datetime.now() - start))
 
 	start = datetime.now()
 
 	# Run algorithm
-	algorithm = Algorithm(sigma, strings, family[0])
+	algorithm = Algorithm(sigma, strings, family)
 	algorithm.run()
 	algorithm.print_fingerprints()
 

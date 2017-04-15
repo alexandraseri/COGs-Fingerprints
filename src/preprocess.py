@@ -24,11 +24,21 @@ def preprocessStrings(fileName):
 			redisKeys[data[i]['key']] = data[i]['value']
 
 		# Insert keys to redis.
-		answer = db.buildStringDB(redisKeys)
+		answer1 = db.buildStringDB(redisKeys)
+
+		redisKeys = {}
+		for i in range(len(data)):
+			strain = data[i]['key'].split('#')[-1]
+			if strain not in redisKeys:
+				redisKeys[strain] = []
+
+			redisKeys[strain].append(data[i]['key'])
+
+		answer2 = db.buildStrainsDB(redisKeys)
 
 		# Record time passed.
 		timedelta = datetime.now() - start
-		if answer is True:
+		if answer1 is True and answer2 is True:
 			print('String DB was built successfully from file {} in {}.'.format (fileName, timedelta))
 
 
