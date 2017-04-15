@@ -11,6 +11,7 @@ def buildRedisKey(index, name):
 	"""
 	return (Consts.redisPrefixWords[index] + name).rstrip()
 
+
 def processTaxaLine(line):
 	"""
 	Process taxa data line from taxa file. 
@@ -25,6 +26,7 @@ def processTaxaLine(line):
 
 	return {'value': lineArray[6], 'keys': keys}
 
+
 def processSigmaLine(line):
 	"""
 	Process sigma line from data file.
@@ -34,6 +36,7 @@ def processSigmaLine(line):
 	lineArray = line.split()
 	key = lineArray[0].split('#')[-1]
 	return {'key': key, 'value': lineArray[1:]}
+
 
 def processStringLine(line):
 	"""
@@ -47,6 +50,7 @@ def processStringLine(line):
 	value = ';'.join(lineArray[1:])
 	return {'key': key, 'value': value}
 
+
 def getFamilySigma(family):
 	"""
 	Get the family's sigma. 
@@ -55,6 +59,7 @@ def getFamilySigma(family):
 	"""
 	return db.getTaxaFamilySigma(family)
 
+
 def getFamilyStrings(family):
 	"""
 	Get the family's strings.
@@ -62,6 +67,7 @@ def getFamilyStrings(family):
 	:return: an array of string associated with requested family.
 	"""
 	return db.getTaxaFamilyStrings(family)
+
 
 def createLife(string, sigma):
 	"""
@@ -80,9 +86,59 @@ def createLife(string, sigma):
 
 	return life
 
-def getAllTaxa():
+
+def getAllTaxaType(familyType):
 	"""
 	Return all taxa families from taxaDB.
+	:param familyType: the family type requested.
 	:return: an array of all the families.
 	"""
-	return db.getTaxaDB()
+	return db.getTaxaType(familyType)
+
+
+def argInOption(arg, options):
+	"""
+	Check if argument is one of the options.
+	:param arg: the argument given.
+	:param options: the options to check.
+	:return: if is an option, return a function, else, returns false.
+	"""
+	if arg not in options:
+		print('You have to provide a valid option: {}. You provided {}.'.format(options.keys().join(', '), arg))
+		return False
+
+	return options[arg]
+
+
+def getFingerprints(file):
+	"""
+	Get all fingerprints from file
+	:param file: the fingerprints file.
+	:return: an Object with keys as fingerprints and values as the strings.
+	"""
+	lines = file.readlines()
+	fingerprints = {}
+	fingerprint = ''
+	for line in lines:
+		if 'fingerprint' in line:
+			fingerprint = line.split(': ')[1]
+		elif 'strings' in line:
+			fingerprints[fingerprint] = line.split(': ')[1].split(', ')
+
+	return fingerprints
+
+
+def getAboveThreshold(threshold, family, strings, fingerprints):
+	"""
+	Get all results above certain threshold number and write them to files in results folder.
+	:param threshold: the requested % of the strings with the same fingerprint.
+	:param family: the family.
+	:param strings: the family's strings.
+	:param fingerprints: the fingerprints object
+	"""
+	minNumber = len(strings) * threshold
+	with open('results/' + family + '_fingerprint_' + str(threshold) + '.txt', 'w+') as file:
+		for key in fingerprints.keys():
+			if len(fingerprints[key]) > minNumber:
+				file.write('--- Fingerprint: {} \n------in strings: {}. \n'.format(key, ', '.join(fingerprints[key])))
+

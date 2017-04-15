@@ -29,13 +29,15 @@ def buildTaxaDB(keys):
 	return True
 
 
-def getTaxaDB():
+def getTaxaType(familyType):
 	"""
 	Return all keys of taxaDB
+	:param familyType: the family type requested.
 	:return: an array of keys from taxaDB.
 	"""
 	taxa = []
-	for key in taxaClient.scan_iter():
+	match = familyType+'_*'
+	for key in taxaClient.scan_iter(match=match):
 		taxa.append(key)
 
 	return taxa
