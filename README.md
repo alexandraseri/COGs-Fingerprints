@@ -26,11 +26,11 @@ python src/preprocess.py -strings <path-to-strings-data-file>
 ```
 
 Available options for preprocess.py:
-* -taxa <path-to-taxa-data-file>:
+* -taxa <path-to-taxa-data-file>:  
     Builds the taxa DB accordingly
-* -sigma <path-to-sigma-data-file>:
+* -sigma <path-to-sigma-data-file>:  
     Builds the sigma DB accordingly
-* -strings <path-to-strings-data-file>:
+* -strings <path-to-strings-data-file>:  
     Builds the strings DB and strains DB accordingly
     
 
@@ -54,6 +54,5 @@ python src/postprocess.py <fingerprints-file-path> <option>
 
 Available options for postprocess.py:
 * -threshold :  
-    Runs postprocessing for thresholds of [0.05, 0.1, 0.2, 0.3, 0.5, 0.8].
-    Where x in thresholds array is the % of strings of all the strings for this family with the same fingerprint.
+    Runs postprocessing for thresholds of [0.05, 0.1, 0.2, 0.3, 0.5, 0.8], where x in thresholds array is the % of strings of all the strings for this family with the same fingerprint.
     
