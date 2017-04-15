@@ -1,3 +1,5 @@
+# Results  
+
 This is a folder that will hold your results.  
 
 After running the algorithm, you will find a file / files with the name: <family>_fingerprints.txt, that will hold all the fingerprint for <family> strings.  
