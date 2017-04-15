@@ -8,10 +8,8 @@ Link: http://www.sciencedirect.com/science/article/pii/S1570866703000352
 This is a simple implementation in python2.7.
 
 Before use, please install redis.  
-```
 * For Linux: https://redis.io/download  
 * For Windows: https://github.com/MSOpenTech/redis/releases
-```
 
 Install redis module via pip:  
 ```
@@ -54,7 +52,7 @@ cd <project-folder>
 python src/postprocess.py <fingerprints-file-path> <option>
 ```
 
-Available options for postprocessing.py:
+Available options for postprocess.py:
 * -threshold :  
     Runs postprocessing for thresholds of [0.05, 0.1, 0.2, 0.3, 0.5, 0.8].
     Where x in thresholds array is the % of strings of all the strings for this family with the same fingerprint.
