@@ -14,7 +14,7 @@ def preprocessStrings(fileName):
 		lines = file.readlines()
 		data = []
 		for line in lines:
-			data.append(hf.analyzeStringLine(line))
+			data.append(hf.processStringLine(line))
 
 		redisKeys = {}
 		for i in range(len(data)):
@@ -36,7 +36,7 @@ def preprocessTaxa(fileName):
 		lines = file.readlines()
 		data = []
 		for line in lines[1:]:
-			data.append(hf.analyzeTaxaLine(line))
+			data.append(hf.processTaxaLine(line))
 
 		redisKeys = {}
 		for i in range(len(data)):
@@ -61,7 +61,7 @@ def preprocessSigma(fileName):
 		lines = file.readlines()
 		data = []
 		for line in lines:
-			data.append(hf.analyzeSigmaLine(line))
+			data.append(hf.processSigmaLine(line))
 
 		redisKeys = {}
 		for i in range(len(data)):
