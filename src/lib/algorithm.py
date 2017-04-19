@@ -105,6 +105,6 @@ class Algorithm:
 		"""
 		Save fingerprint file in results folder, containing all the fingerprints found in the algorithm run.
 		"""
-		with open('results/' + self.family + '_fingerprints.txt', 'w+') as file:
+		with open('../results/' + self.family + '_fingerprints.txt', 'w+') as file:
 			for key in self.fingerPrints.keys():
 				file.write('----> fingerprint: {} \n --------> in strings: {} \n'.format(key, ', '.join(self.fingerPrints[key])))
