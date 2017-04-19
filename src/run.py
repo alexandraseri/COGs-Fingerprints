@@ -41,7 +41,7 @@ def runForType(familyType):
 	for x in range(len(taxa)):
 		if familyType[0] in taxa[x]:
 			print('--- Running for {}. ---'.format(taxa[x]))
-			runAlgorithm([taxa[x]])
+			runAlgorithm(taxa[x])
 
 	# Record time passed.
 	print('*** Total runtime for family type {} was  {} ***'.format(familyType, datetime.now() - start))
