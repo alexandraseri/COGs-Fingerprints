@@ -162,3 +162,11 @@ def buildCogsDB(keys):
 	return True
 
 
+def getCogsForFunction(function):
+	"""
+	Get all cogs with the given function
+	:param function: the wanted function
+	:return: list of cogs with that function
+	"""
+	cogsList = cogsClient.get(function)
+	return cogsList

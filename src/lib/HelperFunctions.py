@@ -1,3 +1,5 @@
+import ast
+
 import Consts
 import RedisDB as db
 
@@ -157,3 +159,90 @@ def getAboveThreshold(threshold, family, strings, fingerprints):
 			if len(fingerprints[key]) > minNumber:
 				file.write('--- Fingerprint: {} \n------in strings: {} \n'.format(key, ', '.join(fingerprints[key])))
 
+
+def getCogs(cogsList):
+	"""
+	Gets cogs list per function provided in cogsList
+	:param cogsList: the cog's functions list.
+	:return: an Object with the key as a cog function, and value as an Object with a repeat key for num of repeats 
+	and a key for list of cogs
+	"""
+	cogsDict = {}
+	for x in range(len(cogsList)):
+		if cogsList[x] not in cogsDict:
+			cogsDict[cogsList[x]] = {
+				'repeat': 1,
+				'list': []
+			}
+		else:
+			cogsDict[cogsList[x]]['repeat'] += 1
+
+	for cog in cogsDict:
+		list = db.getCogsForFunction(cog)
+		if list:
+			try:
+				cogs = ast.literal_eval(list)
+			except ValueError:
+				print('Can\'t get cogs list for cog function [{}]. There was an error when retrieving cogs list.'.format(cog))
+				exit()
+
+			cogsDict[cog]['list'] = cogs
+
+		else:
+			print('Can\'t get cogs list for cog function [{}]. There are no cogs for this function.'.format(cog))
+			exit()
+
+	return cogsDict
+
+
+def analyzeCogsFingerprints(cogs, fingerprints):
+	"""
+	Calculate and analyze all fingerprints with given cogs
+	:param cogs: the cogs to search for 
+	:param fingerprints: the fingerprints to search
+	:return: an Object with keys as relevant fingerprints and values as the strings with those fingerprints 
+	"""
+	relevantFingerprints = {}
+
+	for fingerprint in fingerprints:
+		cogsCounter = {}
+		for cog in cogs:
+			cogsCounter[cog] = 0
+
+		fpCogs = fingerprint.split(';')
+		for cog in cogs:
+			for i in range(len(fpCogs)):
+				if fpCogs[i] in cogs[cog]['list']:
+					cogsCounter[cog] += 1
+
+		all = 0
+		for cog in cogs:
+			if cogsCounter[cog] >= cogs[cog]['repeat']:
+				all += 1
+
+		if all == len(cogs.keys()):
+			relevantFingerprints[fingerprint] = fingerprints[fingerprint]
+
+	return relevantFingerprints
+
+
+def getCountOfStrings(fingerprints):
+	"""
+	Returns an array of different strings in fingerprints object
+	:param fingerprints: the fingerprints object 
+	:return: array of different strings
+	"""
+	stringsDict = {}
+	for fingerprint in fingerprints:
+		strings = fingerprints[fingerprint]
+		for i in range(len(strings)):
+			if strings[i] not in stringsDict:
+				stringsDict[strings[i]] = 0
+
+			stringsDict[strings[i]] += 1
+
+	stringArray = []
+	for string in stringsDict:
+		stringArray.append(string)
+
+	return stringArray
