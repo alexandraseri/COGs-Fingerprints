@@ -51,6 +51,21 @@ def processStringLine(line):
 	return {'key': key, 'value': value}
 
 
+def processCogLine(line):
+	"""
+	Process COG line from data file
+	:param line: the line from the data file to process.
+	:return: an Object with the key as the function of the cog and value as the cog id number
+	"""
+	lineArray = line.split(';')
+	keys = []
+	for x in range(len(lineArray[1])):
+		keys.append(lineArray[1][x])
+
+	value = lineArray[0][3:]
+	return {'keys': keys, 'value': value}
+
+
 def getFamilySigma(family):
 	"""
 	Get the family's sigma. 

@@ -13,6 +13,10 @@ stringClient = redis.StrictRedis(host='localhost', port=6379, db=2)
 """ Strains redis client """
 strainClient = redis.StrictRedis(host='localhost', port=6379, db=3)
 
+""" COGs redis client """
+cogsClient = redis.StrictRedis(host='localhost', port=6379, db=4)
+
+
 def buildTaxaDB(keys):
 	"""
 	Construct taxaDB in redis.
@@ -95,6 +99,7 @@ def buildStringDB(keys):
 	pipe.execute()
 	return True
 
+
 def getTaxaFamilyStrings(family):
 	"""
 	Get the strings associated with the requested family.
@@ -139,3 +144,21 @@ def buildStrainsDB(keys):
 
 	pipe.execute()
 	return True
+
+
+def buildCogsDB(keys):
+	"""
+	Construct cogsDB in redis
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
+	cogsClient.flushdb() # Flush existing contents of cogs DB
+
+	pipe = cogsClient.pipeline()
+	for key in keys:
+		pipe.set(key, keys[key])
+
+	pipe.execute()
+	return True
+
+

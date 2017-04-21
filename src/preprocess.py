@@ -103,10 +103,41 @@ def preprocessSigma(fileName):
 			print('Sigma DB was built successfully from file {} in {}.'.format(fileName, timedelta))
 
 
+def preprocessCogs(fileName):
+	"""
+	Preprocess COGs data
+	:param fileName: the file containing the COGs data 
+	"""
+	start = datetime.now()
+	with open(fileName, 'r') as file:
+		# Read file lines.
+		lines = file.readlines()
+		data = []
+		for line in lines:
+			data.append(hf.processCogLine(line))
+
+		# Prepare redis keys for insertion.
+		redisKeys = {}
+		for i in range(len(data)):
+			for j in range(len(data[i]['keys'])):
+				if data[i]['keys'][j] not in redisKeys:
+					redisKeys[data[i]['keys'][j]] = []
+
+			redisKeys[data[i]['keys'][j]].append(data[i]['value'])
+
+		# Insert keys to redis.
+		answer = db.buildCogsDB(redisKeys)
+
+		# Record time passed.
+		timedelta = datetime.now() - start
+		if answer is True:
+			print('COGs DB was built successfully from file {} in {}.'.format(fileName, timedelta))
+
 options = {
 	'-taxa': preprocessTaxa,
 	'-sigma': preprocessSigma,
-	'-strings': preprocessStrings
+	'-strings': preprocessStrings,
+	'-cogs': preprocessCogs
 }
 
 if __name__ == "__main__":
