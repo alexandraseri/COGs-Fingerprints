@@ -7,6 +7,8 @@ Link: http://www.sciencedirect.com/science/article/pii/S1570866703000352
 
 This is an implementation in python2.7.
 
+### Before use:
+
 Before use, please install redis.  
 * For Linux: https://redis.io/download  
 * For Windows: https://github.com/MSOpenTech/redis/releases
@@ -19,8 +21,9 @@ pip install ast
 pip install datetime
 ```
 
+### Preprocess:
 
-Before running the program:  
+Before running the program you should run this:  
 ```
 cd <project-folder>
 python src/preprocess.py -taxa <path-to-taxa-data-file>
@@ -36,9 +39,11 @@ Available options for preprocess.py:
     Builds the sigma DB accordingly
 * -strings <path-to-strings-data-file>:  
     Builds the strings DB and strains DB accordingly
-* -cogs <path-to-cogs-info-file>:
+* -cogs <path-to-cogs-info-file>:  
     Builds the COGs function DB and the COGs list DB accordingly
     
+
+### Main algorithm:
 
 Now you can run the program (No need to repeat the previous steps on your machine anymore):  
 ```
@@ -52,6 +57,9 @@ Available options for run.py:
 * -t <family-type>:  
     Runs algorithm for a specific family type, for example: -t bacgroup.
     
+    
+### Postprocess:
+
 For postprocessing: 
 ```
 cd <project-folder>
