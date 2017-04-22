@@ -1,3 +1,4 @@
+import os
 import sys
 from datetime import datetime
 
@@ -25,7 +26,7 @@ def runAlgorithm(family):
 	# Run algorithm
 	algorithm = Algorithm(sigma, strings, family)
 	algorithm.run()
-	algorithm.print_fingerprints()
+	algorithm.print_fingerprints(sys.argv[1] + '/')
 
 	# Record time passed.
 	print('Algorithm runtime: {}.'.format(datetime.now() - start))
@@ -56,7 +57,14 @@ if __name__ == "__main__":
 		print('Not enough arguments!')
 
 	else:
-		args = sys.argv[1:]
+		try:
+			os.mkdir(sys.argv[1])
+			print('{} directory created'.format(sys.argv[1]))
+
+		except WindowsError:
+			print('{} directory already exists'.format(sys.argv[1]))
+
+		args = sys.argv[2:]
 		option = hf.argInOption(args[0], options)
 		if option and args[1]:
 			options[args[0]](args[1])

@@ -8,6 +8,7 @@ from lib import HelperFunctions as hf
 family = ''
 fingerprints = {}
 strings = []
+resultsDirectory = ''
 
 
 def absoluteThreshold():
@@ -21,11 +22,11 @@ def absoluteThreshold():
 		thresholdFingerprints = hf.getAboveThreshold(threshold[x], len(strings), fingerprints)
 
 		if len(thresholdFingerprints.keys()) > 0:
-			with open('../results/' + family + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
-				file.write('Total number of strings in family: {}.'.format(len(strings)))
+			with open(resultsDirectory + family + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
+				file.write('Total number of strings in family: {}.\n'.format(len(strings)))
 
 				for fingerprint in thresholdFingerprints:
-					fpStrings = ', '.join()
+					fpStrings = ', '.join(thresholdFingerprints[fingerprint])
 					numOfStrings= len(thresholdFingerprints[fingerprint])
 					line = '--- Fingerprint: {} : numOfStrings: {} \n------in strings: {} \n'
 					file.write(line.format(fingerprint, numOfStrings, fpStrings))
@@ -59,7 +60,7 @@ def cogsProcess(cogsString):
 				thresholdFingerprints = hf.getAboveThreshold(threshold[x], numOfStrings, cogsFingerprints)
 
 				if len(thresholdFingerprints.keys()) > 0:
-					with open('../results/' + filename + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
+					with open(resultsDirectory + filename + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
 						list = ';'.join(cogsList)
 						file.write('Total number of strings in family with COGs function [{}] : {}.\n\n'.format(list, numOfStrings))
 
@@ -85,9 +86,10 @@ if __name__ == "__main__":
 		print('Not enough arguments!')
 
 	else:
-		args = sys.argv[1:]
+		resultsDirectory = sys.argv[1] + '/'
+		args = sys.argv[2:]
 		family = args[0]
-		filepath = '../results/' + family + '_fingerprints.txt'
+		filepath = resultsDirectory + family + '_fingerprints.txt'
 		with open(filepath, 'r+') as file:
 			# Read fingerprint file
 			print('Getting fingerprints for family {}.'.format(family))

@@ -48,8 +48,12 @@ Available options for preprocess.py:
 Now you can run the program (No need to repeat the previous steps on your machine anymore):  
 ```
 cd <project-folder>
-python src/run.py <option> <arg>
+python src/run.py <results-directory> <option> <arg>
 ```
+
+results-directory is the directory in which the program will save the results file. 
+* Can be an absolute or a relative path.  
+* Can be an existing folder or a new directory that the program will create.
 
 Available options for run.py:  
 * -f <family-name> :  
@@ -63,8 +67,13 @@ Available options for run.py:
 For postprocessing: 
 ```
 cd <project-folder>
-python src/postprocess.py <fingerprints-file-path> <option>
+python src/postprocess.py <results-folder> <family> <option>
 ```
+
+1. results-directory is the directory from which the program will get the results file created when running the run.py program.  
+It also will be the directory the postprocess program will save the postprocess results to.   
+Can be an absolute or a relative path.  
+2. family is the specific family name we want to process the results of, for example: bacgroup_Acidobacteria.
 
 Available options for postprocess.py:
 * -threshold :  
