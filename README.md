@@ -1,4 +1,4 @@
-# Miniproject-Bioinformatics2
+# Fingerprints inside COGs strings
 
 This is a mini project code files for "Topics in Bioinformatics 2" course in BGU. 
 
