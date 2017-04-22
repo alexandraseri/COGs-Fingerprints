@@ -38,7 +38,7 @@ def buildTaxaDB(keys):
 
 def getTaxaType(familyType):
 	"""
-	Return all keys of taxaDB
+	Return all keys of taxaDB with family type
 	:param familyType: the family type requested.
 	:return: an array of keys from taxaDB.
 	"""
@@ -48,6 +48,7 @@ def getTaxaType(familyType):
 		taxa.append(key)
 
 	return taxa
+
 
 def buildSigmaDB(keys):
 	"""

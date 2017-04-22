@@ -118,9 +118,9 @@ def createLife(string, sigma):
 
 def getAllTaxaType(familyType):
 	"""
-	Return all taxa families from taxaDB.
+	Return all taxa with family type from taxaDB.
 	:param familyType: the family type requested.
-	:return: an array of all the families.
+	:return: an array of all the relevant taxa.
 	"""
 	return db.getTaxaType(familyType)
 
