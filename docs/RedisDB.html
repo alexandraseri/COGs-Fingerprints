@@ -1,0 +1,76 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module RedisDB</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>RedisDB</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:///C:/dev/bioinformatics%20mini%20project%202/src/lib/redisdb.py">c:\dev\bioinformatics mini project 2\src\lib\redisdb.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="ast.html">ast</a><br>
+</td><td width="25%" valign=top><a href="redis.html">redis</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-buildCogsFunctionDB"><strong>buildCogsFunctionDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;cogs&nbsp;function&nbsp;DB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-buildCogsListDB"><strong>buildCogsListDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;cogs&nbsp;list&nbsp;DB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-buildSigmaDB"><strong>buildSigmaDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;sigmaDB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-buildStrainsDB"><strong>buildStrainsDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;strainsDB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-buildStringDB"><strong>buildStringDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;sigmaDB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-buildTaxaDB"><strong>buildTaxaDB</strong></a>(keys)</dt><dd><tt>Construct&nbsp;taxaDB&nbsp;in&nbsp;redis<br>
+:param&nbsp;keys:&nbsp;the&nbsp;keys&nbsp;to&nbsp;insert&nbsp;to&nbsp;DB&nbsp;with&nbsp;their&nbsp;values<br>
+:return:&nbsp;True&nbsp;when&nbsp;finished</tt></dd></dl>
+ <dl><dt><a name="-getCogFunction"><strong>getCogFunction</strong></a>(cog)</dt><dd><tt>Returns&nbsp;the&nbsp;function&nbsp;for&nbsp;requested&nbsp;cog&nbsp;id<br>
+:param&nbsp;cog:&nbsp;the&nbsp;cog&nbsp;to&nbsp;find<br>
+:return:&nbsp;the&nbsp;function&nbsp;of&nbsp;the&nbsp;cog</tt></dd></dl>
+ <dl><dt><a name="-getCogsForFunction"><strong>getCogsForFunction</strong></a>(function)</dt><dd><tt>Get&nbsp;all&nbsp;cogs&nbsp;with&nbsp;the&nbsp;given&nbsp;function<br>
+:param&nbsp;function:&nbsp;the&nbsp;wanted&nbsp;function<br>
+:return:&nbsp;list&nbsp;of&nbsp;cogs&nbsp;with&nbsp;that&nbsp;function</tt></dd></dl>
+ <dl><dt><a name="-getTaxaFamilySigma"><strong>getTaxaFamilySigma</strong></a>(family)</dt><dd><tt>Get&nbsp;the&nbsp;sigma&nbsp;associated&nbsp;with&nbsp;the&nbsp;requested&nbsp;family<br>
+:param&nbsp;family:&nbsp;the&nbsp;requested&nbsp;family<br>
+:return:&nbsp;an&nbsp;array&nbsp;of&nbsp;sigma&nbsp;as&nbsp;requested</tt></dd></dl>
+ <dl><dt><a name="-getTaxaFamilyStrings"><strong>getTaxaFamilyStrings</strong></a>(family)</dt><dd><tt>Get&nbsp;the&nbsp;strings&nbsp;associated&nbsp;with&nbsp;the&nbsp;requested&nbsp;family<br>
+:param&nbsp;family:&nbsp;the&nbsp;requested&nbsp;family<br>
+:return:&nbsp;an&nbsp;array&nbsp;of&nbsp;strings</tt></dd></dl>
+ <dl><dt><a name="-getTaxaType"><strong>getTaxaType</strong></a>(familyType)</dt><dd><tt>Return&nbsp;all&nbsp;keys&nbsp;of&nbsp;taxaDB&nbsp;with&nbsp;family&nbsp;type<br>
+:param&nbsp;familyType:&nbsp;the&nbsp;family&nbsp;type&nbsp;requested<br>
+:return:&nbsp;an&nbsp;array&nbsp;of&nbsp;keys&nbsp;from&nbsp;taxaDB</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>cogsFunctionClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=4&gt;&gt;&gt;<br>
+<strong>cogsListClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=5&gt;&gt;&gt;<br>
+<strong>sigmaClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=1&gt;&gt;&gt;<br>
+<strong>strainClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=3&gt;&gt;&gt;<br>
+<strong>stringClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=2&gt;&gt;&gt;<br>
+<strong>taxaClient</strong> = StrictRedis&lt;ConnectionPool&lt;Connection&lt;host=localhost,port=6379,db=0&gt;&gt;&gt;</td></tr></table>
+</body></html>
