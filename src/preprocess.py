@@ -7,8 +7,8 @@ from lib import RedisDB as db
 
 def preprocessStrings(fileName):
 	"""
-	Preprocess strings data.
-	:param fileName: the file containing the strings.
+	Preprocess strings data
+	:param fileName: the file containing the strings
 	"""
 	start = datetime.now()
 	with open(fileName, 'r') as file:
@@ -18,7 +18,7 @@ def preprocessStrings(fileName):
 		for line in lines:
 			data.append(hf.processStringLine(line))
 
-		# Prepare redis keys for insertion.
+		# Prepare redis keys for stringsDB.
 		redisKeys = {}
 		for i in range(len(data)):
 			redisKeys[data[i]['key']] = data[i]['value']
@@ -26,6 +26,7 @@ def preprocessStrings(fileName):
 		# Insert keys to redis.
 		answer1 = db.buildStringDB(redisKeys)
 
+		# Prepare redis keys for strainsDB.
 		redisKeys = {}
 		for i in range(len(data)):
 			strain = data[i]['key'].split('#')[-1]
@@ -44,8 +45,8 @@ def preprocessStrings(fileName):
 
 def preprocessTaxa(fileName):
 	"""
-	Preprocess taxa data.
-	:param fileName: the file containing the taxa.
+	Preprocess taxa data
+	:param fileName: the file containing the taxa
 	"""
 	start = datetime.now()
 	with open(fileName, 'r') as file:
@@ -75,8 +76,8 @@ def preprocessTaxa(fileName):
 
 def preprocessSigma(fileName):
 	"""
-	Preprocess sigma data.
-	:param fileName: the file containing the sigma data.
+	Preprocess sigma data
+	:param fileName: the file containing the sigma data
 	"""
 	start = datetime.now()
 	with open(fileName, 'r') as file:
@@ -118,7 +119,7 @@ def preprocessCogs(fileName):
 			functiondata.append(hf.processCogFunctionLine(line))
 			listdata.append(hf.processCogListLine(line))
 
-		# Prepare redis keys for insertion for COG function DB.
+		# Prepare redis keys for insertion for COGs function DB.
 		redisKeys = {}
 		for i in range(len(functiondata)):
 			for j in range(len(functiondata[i]['keys'])):
@@ -130,7 +131,7 @@ def preprocessCogs(fileName):
 		# Insert keys to redis.
 		answer1 = db.buildCogsFunctionDB(redisKeys)
 
-		# Prepare redis keys for insertion for COG function DB.
+		# Prepare redis keys for insertion for COGs list DB.
 		redisKeys = {}
 		for i in range(len(listdata)):
 			redisKeys[listdata[i]['key']] = listdata[i]['value']

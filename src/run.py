@@ -1,6 +1,6 @@
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
 
 from lib import HelperFunctions as hf
 from lib.algorithm import Algorithm

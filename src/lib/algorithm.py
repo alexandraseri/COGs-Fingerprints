@@ -3,14 +3,14 @@ import HelperFunctions as hf
 
 class Algorithm:
 	"""
-	The Algorithm based on the article.
+	The Algorithm based on the article
 	"""
 	def __init__(self, sigma, strings, family):
 		"""
 		Algorithm constructor
-		:param sigma: the sigma for this run of the algorithm.
-		:param strings: the strings to process.
-		:param family: the family those strings are from for documenting purposes.
+		:param sigma: the sigma for this run of the algorithm
+		:param strings: the strings to process
+		:param family: the family those strings are from for documenting purposes
 		"""
 		self.family = family
 		self.sigma = sigma
@@ -19,7 +19,7 @@ class Algorithm:
 
 	def run(self):
 		"""
-		Run the algorithm.
+		Run the algorithm
 		"""
 		for i in range(len(self.stringList)):
 			string = self.stringList[i]
@@ -28,10 +28,10 @@ class Algorithm:
 
 	def initialize(self, k, string):
 		"""
-		Initialize fingerprint. Based on the article.
-		:param k: the wanted size of the fingerprint.
-		:param string: the string to analyze.
-		:return: If no initial fingerprint found, stop the algorithm.
+		Initialize fingerprint. Based on the article
+		:param k: the wanted size of the fingerprint
+		:param string: the string to analyze
+		:return: If no initial fingerprint found, stop the algorithm
 		"""
 		left = 1
 		right = 0
@@ -52,14 +52,14 @@ class Algorithm:
 
 	def main(self, string, k, number, right, left, life):
 		"""
-		Main part of the algorithm, based on the article.
-		:param string: the string to analyze.
-		:param k: the wanted size of the fingerprint.
-		:param number: the current size of the fingerprint.
-		:param right: rightmost index for this run.
-		:param left: leftmost index for this run.
-		:param life: the string's object counting the number of occurrences for each COG.
-		:return: if no fingerprint found, stop the algorithm.
+		Main part of the algorithm, based on the article
+		:param string: the string to analyze
+		:param k: the wanted size of the fingerprint
+		:param number: the current size of the fingerprint
+		:param right: rightmost index for this run
+		:param left: leftmost index for this run
+		:param life: the string's object counting the number of occurrences for each COG
+		:return: if no fingerprint found, stop the algorithm
 		"""
 		while right < len(string['string'].split(';')):
 			while number < k + 1 and right < len(string['string'].split(';')):
@@ -84,13 +84,13 @@ class Algorithm:
 
 	def handle_fingerprint(self, life):
 		"""
-		Saving the fingerprint in fingerprints object.
-		:param life: the string's object counting the number of occurrences for each COG.
+		Saving the fingerprint in fingerprints object
+		:param life: the string's object counting the number of occurrences for each COG
 		"""
 		fingerprint = []
-		letters =life['letters'].keys()
+		letters = life['letters'].keys()
 		for letter in letters:
-			if life['letters'][letter] > 0 :
+			if life['letters'][letter] > 0:
 				fingerprint.append(letter)
 
 		fingerprint.sort()
@@ -103,7 +103,8 @@ class Algorithm:
 
 	def print_fingerprints(self, directory):
 		"""
-		Save fingerprint file in results folder, containing all the fingerprints found in the algorithm run.
+		Save fingerprint file in given directory folder, containing all the fingerprints found in the algorithm run
+		:param directory: the directory to save the results file to
 		"""
 		with open(directory + self.family + '_fingerprints.txt', 'w+') as file:
 			for key in self.fingerPrints.keys():

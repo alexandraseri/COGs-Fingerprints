@@ -7,18 +7,18 @@ import RedisDB as db
 def buildRedisKey(index, name):
 	"""
 	Build a redis key for each kind of 'family'
-	:param index: the type of 'family'. See Consts.redisPrefixWords doc.
-	:param name: the name of the 'family'.
-	:return: a string representing the redis key for requested 'family'.
+	:param index: the type of 'family'. See Consts.redisPrefixWords doc
+	:param name: the name of the 'family'
+	:return: a string representing the redis key for requested 'family'
 	"""
 	return (Consts.redisPrefixWords[index] + name).rstrip()
 
 
 def processTaxaLine(line):
 	"""
-	Process taxa data line from taxa file. 
-	:param line: the line from data file to process.
-	:return: an Object with value as strain_id and keys as all the 'families' associated with it.
+	Process taxa data line from taxa file.
+	:param line: the line from data file to process
+	:return: an Object with value as strain_id and keys as all the 'families' associated with it
 	"""
 	lineArray = line.split(',')
 	keys = []
@@ -31,9 +31,9 @@ def processTaxaLine(line):
 
 def processSigmaLine(line):
 	"""
-	Process sigma line from data file.
-	:param line: the line from data file to process.
-	:return: an Object with key as the strain_id and value as the array of COGs within the line.
+	Process sigma line from data file
+	:param line: the line from data file to process
+	:return: an Object with key as the strain_id and value as the array of COGs within the line
 	"""
 	lineArray = line.split()
 	key = lineArray[0].split('#')[-1]
@@ -43,9 +43,9 @@ def processSigmaLine(line):
 def processStringLine(line):
 	"""
 	Process string line from data file.
-	:param line: the line from data file to process.
+	:param line: the line from data file to process
 	:return: an Object with key as the name_string and value as the string of COGs within the line, 
-	separated by ;.
+	separated by ;
 	"""
 	lineArray = line.split()
 	key = lineArray[0]
@@ -56,7 +56,7 @@ def processStringLine(line):
 def processCogFunctionLine(line):
 	"""
 	Process COG line for function from data file
-	:param line: the line from the data file to process.
+	:param line: the line from the data file to process
 	:return: an Object with the key as the function of the cog and value as the cog id number
 	"""
 	lineArray = line.split(';')
@@ -71,7 +71,7 @@ def processCogFunctionLine(line):
 def processCogListLine(line):
 	"""
 	Process COG line for list from data file
-	:param line: the line from the data file to process.
+	:param line: the line from the data file to process
 	:return: an Object with key as COG id and value as COG function
 	"""
 	lineArray = line.split(';')
@@ -82,29 +82,29 @@ def processCogListLine(line):
 
 def getFamilySigma(family):
 	"""
-	Get the family's sigma. 
-	:param family: the requested family .
-	:return: an array of sigma associated with requested family.
+	Get the family's sigma.
+	:param family: the requested family 
+	:return: an array of sigma associated with requested family
 	"""
 	return db.getTaxaFamilySigma(family)
 
 
 def getFamilyStrings(family):
 	"""
-	Get the family's strings.
-	:param family: the requested family.
-	:return: an array of string associated with requested family.
+	Get the family's strings
+	:param family: the requested family
+	:return: an array of string associated with requested family
 	"""
 	return db.getTaxaFamilyStrings(family)
 
 
 def createLife(string, sigma):
 	"""
-	Create a LIFE object for algorithm.
-	:param string: the LIFE's string.
-	:param sigma: the sigma.
+	Create a LIFE object for algorithm
+	:param string: the LIFE's string
+	:param sigma: the sigma
 	:return: an Object with keys: 'string' as the LIFE's string, 
-	'letters' as an Object containing all the COGs from sigma.
+	'letters' as an Object containing all the COGs from sigma
 	"""
 	life = {
 		'string': string,
@@ -118,19 +118,19 @@ def createLife(string, sigma):
 
 def getAllTaxaType(familyType):
 	"""
-	Return all taxa with family type from taxaDB.
-	:param familyType: the family type requested.
-	:return: an array of all the relevant taxa.
+	Return all taxa with family type from taxaDB
+	:param familyType: the family type requested
+	:return: an array of all the relevant taxa
 	"""
 	return db.getTaxaType(familyType)
 
 
 def argInOption(arg, options):
 	"""
-	Check if argument is one of the options.
-	:param arg: the argument given.
-	:param options: the options to check.
-	:return: if is an option, return a function, else, returns false.
+	Check if argument is one of the options
+	:param arg: the argument given
+	:param options: the options to check
+	:return: if is an option, return a function, else, returns false
 	"""
 	if arg not in options:
 		print('You have to provide a valid option: {}. You provided {}.'.format(', '.join(options.keys()), arg))
@@ -142,8 +142,8 @@ def argInOption(arg, options):
 def getFingerprints(file):
 	"""
 	Get all fingerprints from file
-	:param file: the fingerprints file.
-	:return: an Object with keys as fingerprints and values as the strings.
+	:param file: the fingerprints file
+	:return: an Object with keys as fingerprints and values as the strings
 	"""
 	lines = file.readlines()
 	fingerprints = {}
@@ -151,7 +151,7 @@ def getFingerprints(file):
 	for line in lines:
 		if 'fingerprint' in line:
 			fingerprint = line.split(': ')[1].rstrip()
-		elif 'strings' in line:
+		elif 'in strings' in line:
 			fingerprints[fingerprint] = line.split(': ')[1].rstrip().split(', ')
 
 	return fingerprints
@@ -159,10 +159,10 @@ def getFingerprints(file):
 
 def getAboveThreshold(threshold, numOfStrings, fingerprints):
 	"""
-	Get all results above certain threshold number and write them to files in results folder.
-	:param threshold: the requested % of the strings with the same fingerprint.
-	:param family: the family.
-	:param strings: the family's strings.
+	Get all results above certain threshold number and return them
+	:param threshold: the requested % of the strings with the same fingerprint
+	:param family: the family
+	:param strings: the family's strings
 	:param fingerprints: the fingerprints object
 	:return an Object with the relevant fingerprints and their strings
 	"""
@@ -178,7 +178,7 @@ def getAboveThreshold(threshold, numOfStrings, fingerprints):
 def getCogs(cogsList):
 	"""
 	Gets cogs list per function provided in cogsList
-	:param cogsList: the cog's functions list.
+	:param cogsList: the cog's functions list
 	:return: an Object with the key as a cog function, and value as an Object with a repeat key for num of repeats 
 	and a key for list of cogs
 	"""
@@ -247,9 +247,9 @@ def analyzeCogsFingerprints(cogs, fingerprints):
 
 def getCountOfStrings(fingerprints):
 	"""
-	Returns an array of different strings in fingerprints object
+	Returns the number of different strings in fingerprints object
 	:param fingerprints: the fingerprints object 
-	:return: array of different strings
+	:return: the number of different strings 
 	"""
 	stringsDict = {}
 	for fingerprint in fingerprints:

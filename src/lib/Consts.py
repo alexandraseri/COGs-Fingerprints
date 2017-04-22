@@ -1,6 +1,6 @@
 """
 Type of families: Kingdom, phylum, class, genus, species, bacgroup, order
-The index represents the index in a taxa lineArray from data file.
+The index represents the index in a taxa lineArray from data file
 """
 redisPrefixWords = {
 	0: 'kingdom_',

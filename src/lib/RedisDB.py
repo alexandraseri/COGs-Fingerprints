@@ -1,5 +1,5 @@
-import redis
 import ast
+import redis
 
 """ Taxa redis client """
 taxaClient = redis.StrictRedis(host='localhost', port=6379, db=0)
@@ -22,8 +22,8 @@ cogsListClient = redis.StrictRedis(host='localhost', port=6379, db=5)
 
 def buildTaxaDB(keys):
 	"""
-	Construct taxaDB in redis.
-	:param keys: the keys to insert to DB with their values.
+	Construct taxaDB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 	taxaClient.flushdb() 	# Flush existing contents of taxa DB
@@ -39,8 +39,8 @@ def buildTaxaDB(keys):
 def getTaxaType(familyType):
 	"""
 	Return all keys of taxaDB with family type
-	:param familyType: the family type requested.
-	:return: an array of keys from taxaDB.
+	:param familyType: the family type requested
+	:return: an array of keys from taxaDB
 	"""
 	taxa = []
 	match = familyType+'_*'
@@ -52,8 +52,8 @@ def getTaxaType(familyType):
 
 def buildSigmaDB(keys):
 	"""
-	Construct sigmaDB in redis.
-	:param keys: the keys to insert to DB with their values.
+	Construct sigmaDB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 	sigmaClient.flushdb() # Flush existing contents of sigma DB
@@ -67,9 +67,9 @@ def buildSigmaDB(keys):
 
 def getTaxaFamilySigma(family):
 	"""
-	Get the sigma associated with the requested family.
-	:param family: the requested family.
-	:return: an array of sigma as requested.
+	Get the sigma associated with the requested family
+	:param family: the requested family
+	:return: an array of sigma as requested
 	"""
 	taxaString = taxaClient.get(family)
 	answer = []
@@ -89,8 +89,8 @@ def getTaxaFamilySigma(family):
 
 def buildStringDB(keys):
 	"""
-	Construct sigmaDB in redis.
-	:param keys: the keys to insert to DB with their values.
+	Construct sigmaDB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 
@@ -106,9 +106,9 @@ def buildStringDB(keys):
 
 def getTaxaFamilyStrings(family):
 	"""
-	Get the strings associated with the requested family.
-	:param family: the requested family.
-	:return: an array of strings.
+	Get the strings associated with the requested family
+	:param family: the requested family
+	:return: an array of strings
 	"""
 	taxaString = taxaClient.get(family)
 	strings = []
@@ -136,8 +136,8 @@ def getTaxaFamilyStrings(family):
 
 def buildStrainsDB(keys):
 	"""
-	Construct strainsDB in redis.
-	:param keys: the keys to insert to DB with their values.
+	Construct strainsDB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 	strainClient.flushdb() # Flush existing contents of strains DB
@@ -152,8 +152,8 @@ def buildStrainsDB(keys):
 
 def buildCogsFunctionDB(keys):
 	"""
-	Construct cogsDB in redis
-	:param keys: the keys to insert to DB with their values.
+	Construct cogs function DB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 	cogsFunctionClient.flushdb() # Flush existing contents of cogs DB
@@ -178,8 +178,8 @@ def getCogsForFunction(function):
 
 def buildCogsListDB(keys):
 	"""
-	Construct cogsDB in redis
-	:param keys: the keys to insert to DB with their values.
+	Construct cogs list DB in redis
+	:param keys: the keys to insert to DB with their values
 	:return: True when finished
 	"""
 	cogsListClient.flushdb() # Flush existing contents of cogs DB

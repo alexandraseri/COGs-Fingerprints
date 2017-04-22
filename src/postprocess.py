@@ -13,7 +13,7 @@ resultsDirectory = ''
 
 def absoluteThreshold():
 	"""
-	Calculate fingerprints who appear more than the threshold in family's strings, and write results to file.
+	Calculate fingerprints who appear more than the threshold in family's strings, and write results to file
 	"""
 	start = datetime.now()
 	strings = hf.getFamilyStrings(family)
@@ -28,7 +28,7 @@ def absoluteThreshold():
 				for fingerprint in thresholdFingerprints:
 					fpStrings = ', '.join(thresholdFingerprints[fingerprint])
 					numOfStrings= len(thresholdFingerprints[fingerprint])
-					line = '--- Fingerprint: {} : numOfStrings: {} \n------in strings: {} \n'
+					line = '--- Fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
 					file.write(line.format(fingerprint, numOfStrings, fpStrings))
 
 	# Record time passed.
@@ -37,43 +37,45 @@ def absoluteThreshold():
 
 def cogsProcess(cogsString):
 	"""
-	Calculate fingerprints who have COGs with the function list provided, calculate thresholds and write results to file. 
+	Calculate fingerprints who have COGs with the function list provided, calculate thresholds and write results to file
 	:param cogsString: the provided function list for COGs
 	"""
 	if cogsString:
+		start = datetime.now()
+		cogsList = []
 		try:
 			cogsList = ast.literal_eval(cogsString)
-			cogs = hf.getCogs(cogsList)
-			start = datetime.now()
-			cogsFingerprints = hf.analyzeCogsFingerprints(cogs, fingerprints)
-			numOfStrings = hf.getCountOfStrings(cogsFingerprints)
-
-			print('Checking thresholds for the {} different strings in relevant fingerprints.'.format(len(strings)))
-			threshold = [0.05, 0.1, 0.2, 0.3, 0.5, 0.8]
-
-			filename = family + '_with_cogs'
-			for cog in cogs:
-				for i in range(cogs[cog]['repeat']):
-					filename += '_' + cog
-
-			for x in range(len(threshold)):
-				thresholdFingerprints = hf.getAboveThreshold(threshold[x], numOfStrings, cogsFingerprints)
-
-				if len(thresholdFingerprints.keys()) > 0:
-					with open(resultsDirectory + filename + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
-						list = ';'.join(cogsList)
-						file.write('Total number of strings in family with COGs function [{}] : {}.\n\n'.format(list, numOfStrings))
-
-						for fingerprint in thresholdFingerprints:
-							fpStrings = ', '.join(thresholdFingerprints[fingerprint])
-							line = '--- Fingerprint: {} : numOfStrings: {}\n------in strings: {} \n'
-							file.write(line.format(fingerprint, len(thresholdFingerprints[fingerprint]), fpStrings))
-
-			print('Cogs calculation runtime: {}.'.format(datetime.now() - start))
 
 		except ValueError:
 			print('You have to provide a valid cogs list in the form ["S","V","V"]. You provided {}.'.format(cogsString))
 			exit()
+
+		cogs = hf.getCogs(cogsList)
+		cogsFingerprints = hf.analyzeCogsFingerprints(cogs, fingerprints)
+		numOfStrings = hf.getCountOfStrings(cogsFingerprints)
+
+		print('Checking thresholds for the {} different strings in relevant fingerprints.'.format(len(strings)))
+		threshold = [0.05, 0.1, 0.2, 0.3, 0.5, 0.8]
+
+		filename = family + '_with_cogs'
+		for cog in cogs:
+			for i in range(cogs[cog]['repeat']):
+				filename += '_' + cog
+
+		for x in range(len(threshold)):
+			thresholdFingerprints = hf.getAboveThreshold(threshold[x], numOfStrings, cogsFingerprints)
+
+			if len(thresholdFingerprints.keys()) > 0:
+				with open(resultsDirectory + filename + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
+					list = ';'.join(cogsList)
+					file.write('Total number of strings in family with COGs function [{}] : {}.\n\n'.format(list, numOfStrings))
+
+					for fingerprint in thresholdFingerprints:
+						fpStrings = ', '.join(thresholdFingerprints[fingerprint])
+						line = '--- Fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
+						file.write(line.format(fingerprint, len(thresholdFingerprints[fingerprint]), fpStrings))
+
+		print('Cogs calculation runtime: {}.'.format(datetime.now() - start))
 
 
 options = {
