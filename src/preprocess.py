@@ -112,25 +112,35 @@ def preprocessCogs(fileName):
 	with open(fileName, 'r') as file:
 		# Read file lines.
 		lines = file.readlines()
-		data = []
+		listdata = []
+		functiondata = []
 		for line in lines:
-			data.append(hf.processCogLine(line))
+			functiondata.append(hf.processCogFunctionLine(line))
+			listdata.append(hf.processCogListLine(line))
 
-		# Prepare redis keys for insertion.
+		# Prepare redis keys for insertion for COG function DB.
 		redisKeys = {}
-		for i in range(len(data)):
-			for j in range(len(data[i]['keys'])):
-				if data[i]['keys'][j] not in redisKeys:
-					redisKeys[data[i]['keys'][j]] = []
+		for i in range(len(functiondata)):
+			for j in range(len(functiondata[i]['keys'])):
+				if functiondata[i]['keys'][j] not in redisKeys:
+					redisKeys[functiondata[i]['keys'][j]] = []
 
-			redisKeys[data[i]['keys'][j]].append(data[i]['value'])
+			redisKeys[functiondata[i]['keys'][j]].append(functiondata[i]['value'])
 
 		# Insert keys to redis.
-		answer = db.buildCogsDB(redisKeys)
+		answer1 = db.buildCogsFunctionDB(redisKeys)
+
+		# Prepare redis keys for insertion for COG function DB.
+		redisKeys = {}
+		for i in range(len(listdata)):
+			redisKeys[listdata[i]['key']] = listdata[i]['value']
+
+		# Insert keys to redis.
+		answer2 = db.buildCogsListDB(redisKeys)
 
 		# Record time passed.
 		timedelta = datetime.now() - start
-		if answer is True:
+		if answer1 is True and answer2 is True:
 			print('COGs DB was built successfully from file {} in {}.'.format(fileName, timedelta))
 
 options = {

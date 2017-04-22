@@ -13,8 +13,11 @@ stringClient = redis.StrictRedis(host='localhost', port=6379, db=2)
 """ Strains redis client """
 strainClient = redis.StrictRedis(host='localhost', port=6379, db=3)
 
-""" COGs redis client """
-cogsClient = redis.StrictRedis(host='localhost', port=6379, db=4)
+""" COGs functions redis client """
+cogsFunctionClient = redis.StrictRedis(host='localhost', port=6379, db=4)
+
+""" COGs list redis client """
+cogsListClient = redis.StrictRedis(host='localhost', port=6379, db=5)
 
 
 def buildTaxaDB(keys):
@@ -146,15 +149,15 @@ def buildStrainsDB(keys):
 	return True
 
 
-def buildCogsDB(keys):
+def buildCogsFunctionDB(keys):
 	"""
 	Construct cogsDB in redis
 	:param keys: the keys to insert to DB with their values.
 	:return: True when finished
 	"""
-	cogsClient.flushdb() # Flush existing contents of cogs DB
+	cogsFunctionClient.flushdb() # Flush existing contents of cogs DB
 
-	pipe = cogsClient.pipeline()
+	pipe = cogsFunctionClient.pipeline()
 	for key in keys:
 		pipe.set(key, keys[key])
 
@@ -168,5 +171,34 @@ def getCogsForFunction(function):
 	:param function: the wanted function
 	:return: list of cogs with that function
 	"""
-	cogsList = cogsClient.get(function)
+	cogsList = cogsFunctionClient.get(function)
 	return cogsList
+
+
+def buildCogsListDB(keys):
+	"""
+	Construct cogsDB in redis
+	:param keys: the keys to insert to DB with their values.
+	:return: True when finished
+	"""
+	cogsListClient.flushdb() # Flush existing contents of cogs DB
+
+	pipe = cogsListClient.pipeline()
+	for key in keys:
+		pipe.set(key, keys[key])
+
+	pipe.execute()
+	return True
+
+
+def getCogFunction(cog):
+	"""
+	Returns the function for requested cog id
+	:param cog: the cog to find
+	:return: the function of the cog
+	"""
+	function = cogsListClient.get(cog)
+	if not function:
+		return cog
+
+	return function

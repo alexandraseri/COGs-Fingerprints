@@ -107,4 +107,4 @@ class Algorithm:
 		"""
 		with open('../results/' + self.family + '_fingerprints.txt', 'w+') as file:
 			for key in self.fingerPrints.keys():
-				file.write('----> fingerprint: {} \n --------> in strings: {} \n'.format(key, ', '.join(self.fingerPrints[key])))
+				file.write('---->fingerprint: {}\n-------->in strings: {} \n'.format(key, ', '.join(self.fingerPrints[key])))

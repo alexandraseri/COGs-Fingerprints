@@ -53,9 +53,9 @@ def processStringLine(line):
 	return {'key': key, 'value': value}
 
 
-def processCogLine(line):
+def processCogFunctionLine(line):
 	"""
-	Process COG line from data file
+	Process COG line for function from data file
 	:param line: the line from the data file to process.
 	:return: an Object with the key as the function of the cog and value as the cog id number
 	"""
@@ -66,6 +66,18 @@ def processCogLine(line):
 
 	value = lineArray[0][3:]
 	return {'keys': keys, 'value': value}
+
+
+def processCogListLine(line):
+	"""
+	Process COG line for list from data file
+	:param line: the line from the data file to process.
+	:return: an Object with key as COG id and value as COG function
+	"""
+	lineArray = line.split(';')
+	key = lineArray[0][3:]
+	value = lineArray[1]
+	return {'key': key, 'value': value}
 
 
 def getFamilySigma(family):
@@ -145,19 +157,22 @@ def getFingerprints(file):
 	return fingerprints
 
 
-def getAboveThreshold(threshold, family, strings, fingerprints):
+def getAboveThreshold(threshold, numOfStrings, fingerprints):
 	"""
 	Get all results above certain threshold number and write them to files in results folder.
 	:param threshold: the requested % of the strings with the same fingerprint.
 	:param family: the family.
 	:param strings: the family's strings.
 	:param fingerprints: the fingerprints object
+	:return an Object with the relevant fingerprints and their strings
 	"""
-	minNumber = len(strings) * threshold
-	with open('../results/' + family + '_fingerprint_' + str(threshold) + '.txt', 'w+') as file:
-		for key in fingerprints.keys():
-			if len(fingerprints[key]) > minNumber:
-				file.write('--- Fingerprint: {} \n------in strings: {} \n'.format(key, ', '.join(fingerprints[key])))
+	minNumber = numOfStrings * threshold
+	relevantFingerprints = {}
+	for fingerprint in fingerprints:
+		if len(fingerprints[fingerprint]) > minNumber:
+			relevantFingerprints[fingerprint] = fingerprints[fingerprint]
+
+	return relevantFingerprints
 
 
 def getCogs(cogsList):
@@ -221,7 +236,11 @@ def analyzeCogsFingerprints(cogs, fingerprints):
 				all += 1
 
 		if all == len(cogs.keys()):
-			relevantFingerprints[fingerprint] = fingerprints[fingerprint]
+			fingerprintWithFunctions = fingerprint + ' : '
+			for i in range(len(fpCogs)):
+				fingerprintWithFunctions += db.getCogFunction(fpCogs[i]) + ';'
+
+			relevantFingerprints[fingerprintWithFunctions[:-1]] = fingerprints[fingerprint]
 
 	return relevantFingerprints
 
@@ -241,8 +260,4 @@ def getCountOfStrings(fingerprints):
 
 			stringsDict[strings[i]] += 1
 
-	stringArray = []
-	for string in stringsDict:
-		stringArray.append(string)
-
-	return stringArray
+	return len(stringsDict.keys())
