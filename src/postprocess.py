@@ -121,7 +121,7 @@ def findProcess(findString):
 
 def findWithLenProcess(findString, length):
 	"""
-	Calculate fingerprints who have the COGs provided with length constrain of fingerprints and write results to file
+	Calculate fingerprints who have the COGs provided with length constrain of fingerprints length and write results to file
 	:param findString: the provided list for COGs
 	:param length: the length constrain
 	"""
