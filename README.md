@@ -82,5 +82,7 @@ Available options for postprocess.py:
     Runs postprocessing for a specific COGs function list, for example: -cogs ['S','V','V'].  
     Finds all fingerprints with those functions that are above threshold (as in the previous option) with the addition of threshold 0 for all the fingerprints w.
 * -find <list-of-cogs-numbers> :  
-    Runs postprocessing for a specific COGs list, for example: -cogs ['0841','0845','3422'].  
-    
+    Runs postprocessing for a specific COGs list, for example: -find ['0841','0845','3422'].  
+* -findWithLen <list-of-cogs-numbers> <length>:  
+    Runs postprocessing for a specific COGs list for length constrain, for example: -findWithLen ['0841','0845','3422'] 4.  
+  
