@@ -175,7 +175,7 @@ def getAboveThreshold(threshold, numOfStrings, fingerprints):
 	return relevantFingerprints
 
 
-def getCogs(cogsList):
+def getCogsFunctions(cogsList):
 	"""
 	Gets cogs list per function provided in cogsList
 	:param cogsList: the cog's functions list
@@ -261,3 +261,53 @@ def getCountOfStrings(fingerprints):
 			stringsDict[strings[i]] += 1
 
 	return len(stringsDict.keys())
+
+
+def getCogsList(cogsList):
+	"""
+	Gets cogs list per cog number provided in cogsList
+	:param cogsList: the cogs numbers list
+	:return: an Object with the key as a cog number, and value as a repeat key 
+	"""
+	cogsDict = {}
+	for x in range(len(cogsList)):
+		if cogsList[x] not in cogsDict:
+			cogsDict[cogsList[x]] = 1
+		else:
+			cogsDict[cogsList[x]] += 1
+
+	return cogsDict
+
+
+def findFingerprintsWithCogs(cogs, fingerprints):
+	"""
+	Find all fingerprints with given cogs
+	:param cogs: the cogs to search for 
+	:param fingerprints: the fingerprints to search
+	:return: an Object with keys as relevant fingerprints and values as the strings with those fingerprints 
+	"""
+	relevantFingerprints = {}
+
+	for fingerprint in fingerprints:
+		cogsCounter = {}
+		for cog in cogs:
+			cogsCounter[cog] = 0
+
+		fpCogs = fingerprint.split(';')
+		for cog in cogs:
+			if cog in fpCogs:
+				cogsCounter[cog] += 1
+
+		all = 0
+		for cog in cogs:
+			if cogsCounter[cog] >= cogs[cog]:
+				all += 1
+
+		if all == len(cogs.keys()):
+			fingerprintWithFunctions = fingerprint + ' : '
+			for i in range(len(fpCogs)):
+				fingerprintWithFunctions += db.getCogFunction(fpCogs[i]) + ';'
+
+			relevantFingerprints[fingerprintWithFunctions[:-1]] = fingerprints[fingerprint]
+
+	return relevantFingerprints

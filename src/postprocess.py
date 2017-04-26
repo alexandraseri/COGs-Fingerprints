@@ -7,7 +7,6 @@ from lib import HelperFunctions as hf
 """ Global variables """
 family = ''
 fingerprints = {}
-strings = []
 resultsDirectory = ''
 
 
@@ -28,7 +27,7 @@ def absoluteThreshold():
 				for fingerprint in thresholdFingerprints:
 					fpStrings = ', '.join(thresholdFingerprints[fingerprint])
 					numOfStrings= len(thresholdFingerprints[fingerprint])
-					line = '--- Fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
+					line = '--- fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
 					file.write(line.format(fingerprint, numOfStrings, fpStrings))
 
 	# Record time passed.
@@ -50,12 +49,12 @@ def cogsProcess(cogsString):
 			print('You have to provide a valid cogs list in the form ["S","V","V"]. You provided {}.'.format(cogsString))
 			exit()
 
-		cogs = hf.getCogs(cogsList)
+		cogs = hf.getCogsFunctions(cogsList)
 		cogsFingerprints = hf.analyzeCogsFingerprints(cogs, fingerprints)
 		numOfStrings = hf.getCountOfStrings(cogsFingerprints)
 
-		print('Checking thresholds for the {} different strings in relevant fingerprints.'.format(len(strings)))
-		threshold = [0.05, 0.1, 0.2, 0.3, 0.5, 0.8]
+		print('Checking thresholds for the {} different strings in relevant fingerprints.'.format(numOfStrings))
+		threshold = [0, 0.05, 0.1, 0.2, 0.3, 0.5, 0.8]
 
 		filename = family + '_with_cogs'
 		for cog in cogs:
@@ -66,21 +65,63 @@ def cogsProcess(cogsString):
 			thresholdFingerprints = hf.getAboveThreshold(threshold[x], numOfStrings, cogsFingerprints)
 
 			if len(thresholdFingerprints.keys()) > 0:
-				with open(resultsDirectory + filename + '_fingerprint_' + str(threshold[x]) + '.txt', 'w+') as file:
+				if threshold[x] == 0:
+					path = resultsDirectory + filename + '_fingerprints.txt'
+				else:
+					path = resultsDirectory + filename + '_fingerprint_' + str(threshold[x]) + '.txt'
+
+				with open(path, 'w+') as file:
 					list = ';'.join(cogsList)
 					file.write('Total number of strings in family with COGs function [{}] : {}.\n\n'.format(list, numOfStrings))
 
 					for fingerprint in thresholdFingerprints:
 						fpStrings = ', '.join(thresholdFingerprints[fingerprint])
-						line = '--- Fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
+						line = '--- fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
 						file.write(line.format(fingerprint, len(thresholdFingerprints[fingerprint]), fpStrings))
 
 		print('Cogs calculation runtime: {}.'.format(datetime.now() - start))
 
 
+def findProcess(findString):
+	"""
+	Calculate fingerprints who have the COGs provided and write results to file
+	:param findString: the provided list for COGs
+	"""
+	if findString:
+		start = datetime.now()
+		cogsList = []
+		try:
+			cogsList = ast.literal_eval(findString)
+
+		except ValueError:
+			print('You have to provide a valid cogs list in the form [1054, 3049, 3769]. You provided {}.'.format(findString))
+			exit()
+
+		cogs = hf.getCogsList(cogsList)
+		cogsFingerprints = hf.findFingerprintsWithCogs(cogs, fingerprints)
+		numOfStrings = hf.getCountOfStrings(cogsFingerprints)
+
+		filename = family + '_with_cogs'
+		for cog in cogs:
+			for i in range(cogs[cog]):
+				filename += '_' + cog
+
+		with open(resultsDirectory + filename + '_fingerprints_list.txt', 'w+') as file:
+			list = ';'.join(cogsList)
+			file.write('Total number of strings in family with COGs [{}] : {}.\n\n'.format(list, numOfStrings))
+
+			for fingerprint in cogsFingerprints:
+				fpStrings = ', '.join(cogsFingerprints[fingerprint])
+				line = '--- fingerprint: {} : numOfStrings: {}\n------in strings: {}\n'
+				file.write(line.format(fingerprint, len(cogsFingerprints[fingerprint]), fpStrings))
+
+		print('Find calculation runtime: {}.'.format(datetime.now() - start))
+
+
 options = {
 	'-threshold': absoluteThreshold,
-	'-cogs': cogsProcess
+	'-cogs': cogsProcess,
+	'-find': findProcess
 }
 
 if __name__ == "__main__":
@@ -103,9 +144,10 @@ if __name__ == "__main__":
 				option = hf.argInOption(args[x], options)
 				if option:
 					print('Starting {} post process option.'.format(args[x]))
-					if args[x] == '-cogs' and args[x+1]:
-						options[args[x]](args[x+1])
-						x += 2
-					else:
+					if args[x] == '-threshold':
 						options[args[x]]()
 						x += 1
+
+					elif args[x+1]:
+						options[args[x]](args[x+1])
+						x += 2

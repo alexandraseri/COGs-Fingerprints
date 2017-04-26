@@ -67,7 +67,7 @@ Available options for run.py:
 For postprocessing: 
 ```
 cd <project-folder>
-python src/postprocess.py <results-folder> <family> <option>
+python src/postprocess.py <results-folder> <family> <options....>
 ```
 
 1. results-directory is the directory from which the program will get the results file created when running the run.py program.  
@@ -77,7 +77,10 @@ Can be an absolute or a relative path.
 
 Available options for postprocess.py:
 * -threshold :  
-    Runs postprocessing for thresholds of [0.05, 0.1, 0.2, 0.3, 0.5, 0.8], where x in thresholds array is the % of strings of all the strings for this family with the same fingerprint.
+    Runs postprocessing for thresholds of [0.05, 0.1, 0.2, 0.3, 0.5, 0.8], where x in thresholds array is the % of strings of all the strings for this family with the same fingerprint.  
 * -cogs <list-of-cogs-function> :  
     Runs postprocessing for a specific COGs function list, for example: -cogs ['S','V','V'].  
-    Finds all fingerprints with those functions that are above threshold (as in the previous option).
+    Finds all fingerprints with those functions that are above threshold (as in the previous option) with the addition of threshold 0 for all the fingerprints w.
+* -find <list-of-cogs-numbers> :  
+    Runs postprocessing for a specific COGs list, for example: -cogs ['0841','0845','3422'].  
+    

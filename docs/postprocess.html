@@ -31,6 +31,8 @@
 <td width="100%"><dl><dt><a name="-absoluteThreshold"><strong>absoluteThreshold</strong></a>()</dt><dd><tt>Calculate&nbsp;fingerprints&nbsp;who&nbsp;appear&nbsp;more&nbsp;than&nbsp;the&nbsp;threshold&nbsp;in&nbsp;family's&nbsp;strings,&nbsp;and&nbsp;write&nbsp;results&nbsp;to&nbsp;file</tt></dd></dl>
  <dl><dt><a name="-cogsProcess"><strong>cogsProcess</strong></a>(cogsString)</dt><dd><tt>Calculate&nbsp;fingerprints&nbsp;who&nbsp;have&nbsp;COGs&nbsp;with&nbsp;the&nbsp;function&nbsp;list&nbsp;provided,&nbsp;calculate&nbsp;thresholds&nbsp;and&nbsp;write&nbsp;results&nbsp;to&nbsp;file<br>
 :param&nbsp;cogsString:&nbsp;the&nbsp;provided&nbsp;function&nbsp;list&nbsp;for&nbsp;COGs</tt></dd></dl>
+ <dl><dt><a name="-findProcess"><strong>findProcess</strong></a>(findString)</dt><dd><tt>Calculate&nbsp;fingerprints&nbsp;who&nbsp;have&nbsp;the&nbsp;COGs&nbsp;provided&nbsp;and&nbsp;write&nbsp;results&nbsp;to&nbsp;file<br>
+:param&nbsp;findString:&nbsp;the&nbsp;provided&nbsp;list&nbsp;for&nbsp;COGs</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -40,7 +42,6 @@
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>family</strong> = ''<br>
 <strong>fingerprints</strong> = {}<br>
-<strong>options</strong> = {'-cogs': &lt;function cogsProcess&gt;, '-threshold': &lt;function absoluteThreshold&gt;}<br>
-<strong>resultsDirectory</strong> = ''<br>
-<strong>strings</strong> = []</td></tr></table>
+<strong>options</strong> = {'-cogs': &lt;function cogsProcess&gt;, '-find': &lt;function findProcess&gt;, '-threshold': &lt;function absoluteThreshold&gt;}<br>
+<strong>resultsDirectory</strong> = ''</td></tr></table>
 </body></html>
