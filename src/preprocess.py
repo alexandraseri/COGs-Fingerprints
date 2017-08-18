@@ -1,163 +1,123 @@
 from datetime import datetime
+from pyelasticsearch import ElasticSearch
+from itertools import combinations
+
 import sys
 
 from lib import HelperFunctions as hf
-from lib import RedisDB as db
+
+es = ElasticSearch()
 
 
-def preprocessStrings(fileName):
+def preprocessStrings(strings, taxa, cogs):
 	"""
 	Preprocess strings data
-	:param fileName: the file containing the strings
+	:param strings: the file containing the strings
+	:param taxa: the taxa data
+	:param cogs: the cogs data
 	"""
 	start = datetime.now()
-	with open(fileName, 'r') as file:
-		# Read file lines.
-		lines = file.readlines()
-		data = []
-		for line in lines:
-			data.append(hf.processStringLine(line))
 
-		# Prepare redis keys for stringsDB.
-		redisKeys = {}
-		for i in range(len(data)):
-			redisKeys[data[i]['key']] = data[i]['value']
+	strings_lines = strings.readlines()
+	strings_data = []
+	for line in strings_lines:
+		strings_line = hf.processStringLine(line)
 
-		# Insert keys to redis.
-		answer1 = db.buildStringDB(redisKeys)
+		''' Add taxa data '''
+		strings_line['taxa_family'] = taxa[strings_line['strain_id']]
 
-		# Prepare redis keys for strainsDB.
-		redisKeys = {}
-		for i in range(len(data)):
-			strain = data[i]['key'].split('#')[-1]
-			if strain not in redisKeys:
-				redisKeys[strain] = []
+		''' Add COGs data'''
+		cogs_list = []
+		for i in range(len(strings_line['words'])):
+			if strings_line['words'][i] in cogs:
+				cogs_list.append(cogs[strings_line['words'][i]])
 
-			redisKeys[strain].append(data[i]['key'])
+		strings_line['cogs_info'] = cogs_list
 
-		answer2 = db.buildStrainsDB(redisKeys)
+		# ''' Add fingerprints '''
+		# words = strings_line['words']
+		#
+		# fingerprints = []
+		# for i in range(1, len(words)):
+		# 	comb = set(combinations(words, i))
+		# 	list_comb = []
+		# 	for c in comb:
+		# 		list_comb.append(list(set(c)))
+		#
+		# 	fingerprints = fingerprints + list_comb
+		#
+		# strings_line['fingerprints'] = set(tuple(i) for i in fingerprints)
 
-		# Record time passed.
-		timedelta = datetime.now() - start
-		if answer1 is True and answer2 is True:
-			print('String DB was built successfully from file {} in {}.'.format (fileName, timedelta))
+		''' Add to list of strings to insert'''
+		strings_data.append(es.index_op(strings_line))
+
+	for i in range(0, len(strings_data), 2000):
+		es.bulk(strings_data[i: i+2000], index='strings', doc_type='stringsObject')
+
+	timedelta = datetime.now() - start
+	print('Strings data was inserted to db in {}.'.format(timedelta))
 
 
-def preprocessTaxa(fileName):
+def preprocessTaxa(taxa):
 	"""
 	Preprocess taxa data
-	:param fileName: the file containing the taxa
+	:param taxa: the file containing the taxa
+	:return: the taxa data array
 	"""
+	global taxa_index
 	start = datetime.now()
-	with open(fileName, 'r') as file:
-		# Read file lines.
-		lines = file.readlines()
-		data = []
-		for line in lines[1:]:
-			data.append(hf.processTaxaLine(line))
+	taxa_lines = taxa.readlines()
+	taxa_data = {}
+	es_taxa = []
+	for line in taxa_lines:
+		taxa_line = hf.processTaxaLine(line)
+		taxa_data[taxa_line['strain_id']] = taxa_line
+		es_taxa.append(es.index_op(taxa_line))
 
-		# Prepare redis keys for insertion.
-		redisKeys = {}
-		for i in range(len(data)):
-			for key in data[i]['keys']:
-				if key not in redisKeys:
-					redisKeys[key] = []
-
-				redisKeys[key].append(data[i]['value'])
-
-		# Insert keys to redis.
-		answer = db.buildTaxaDB(redisKeys)
-
-		# Record time passed.
-		timedelta = datetime.now() - start
-		if answer is True:
-			print('Taxa DB was built successfully from file {} in {}.'.format(fileName, timedelta))
+	es.bulk(es_taxa, index='taxa', doc_type='taxaObject')
+	timedelta = datetime.now() - start
+	print('Taxa data was inserted to db in {}.'.format(timedelta))
+	return taxa_data
 
 
-def preprocessSigma(fileName):
-	"""
-	Preprocess sigma data
-	:param fileName: the file containing the sigma data
-	"""
-	start = datetime.now()
-	with open(fileName, 'r') as file:
-		# Read file lines.
-		lines = file.readlines()
-		data = []
-		for line in lines:
-			data.append(hf.processSigmaLine(line))
-
-		# Prepare redis keys for insertion.
-		redisKeys = {}
-		for i in range(len(data)):
-			if data[i]['key'] not in redisKeys:
-				redisKeys[data[i]['key']] = []
-
-			redisKeys[data[i]['key']].extend(x for x in data[i]['value'] if x not in redisKeys[data[i]['key']])
-
-		# Insert keys to redis.
-		answer = db.buildSigmaDB(redisKeys)
-
-		# Record time passed.
-		timedelta = datetime.now() - start
-		if answer is True:
-			print('Sigma DB was built successfully from file {} in {}.'.format(fileName, timedelta))
-
-
-def preprocessCogs(fileName):
+def preprocessCogs(cogs):
 	"""
 	Preprocess COGs data
-	:param fileName: the file containing the COGs data 
+	:param cogs: the file containing the COGs data
+	:return: the COGs data array
 	"""
 	start = datetime.now()
-	with open(fileName, 'r') as file:
-		# Read file lines.
-		lines = file.readlines()
-		listdata = []
-		functiondata = []
-		for line in lines:
-			functiondata.append(hf.processCogFunctionLine(line))
-			listdata.append(hf.processCogListLine(line))
+	cogs_lines = cogs.readlines()
+	cogs_data = {}
+	es_cogs = []
+	for line in cogs_lines:
+		cogs_line = hf.processCogListLine(line)
+		cogs_data[cogs_line['COG_id']] = cogs_line
+		es_cogs.append(es.index_op(cogs_line))
 
-		# Prepare redis keys for insertion for COGs function DB.
-		redisKeys = {}
-		for i in range(len(functiondata)):
-			for j in range(len(functiondata[i]['keys'])):
-				if functiondata[i]['keys'][j] not in redisKeys:
-					redisKeys[functiondata[i]['keys'][j]] = []
+	es.bulk(es_cogs, index='cogs', doc_type='cogsObject')
+	timedelta = datetime.now() - start
+	print('COGs data was inserted to db in {}.'.format(timedelta))
+	return cogs_data
 
-			redisKeys[functiondata[i]['keys'][j]].append(functiondata[i]['value'])
 
-		# Insert keys to redis.
-		answer1 = db.buildCogsFunctionDB(redisKeys)
+def preprocess(taxa, cogs, strings):
+	"""
+	Preprocess data sent by user
+	:param taxa: the taxa file
+	:param cogs: the cogs file
+	:param strings: the strings file
+	"""
+	taxa_data = preprocessTaxa(taxa)
+	cogs_data = preprocessCogs(cogs)
+	preprocessStrings(strings, taxa_data, cogs_data)
 
-		# Prepare redis keys for insertion for COGs list DB.
-		redisKeys = {}
-		for i in range(len(listdata)):
-			redisKeys[listdata[i]['key']] = listdata[i]['value']
-
-		# Insert keys to redis.
-		answer2 = db.buildCogsListDB(redisKeys)
-
-		# Record time passed.
-		timedelta = datetime.now() - start
-		if answer1 is True and answer2 is True:
-			print('COGs DB was built successfully from file {} in {}.'.format(fileName, timedelta))
-
-options = {
-	'-taxa': preprocessTaxa,
-	'-sigma': preprocessSigma,
-	'-strings': preprocessStrings,
-	'-cogs': preprocessCogs
-}
 
 if __name__ == "__main__":
-	if len(sys.argv) < 3:
+	if len(sys.argv) < 4:
 		print('Not enough arguments!')
 
 	else:
 		args = sys.argv[1:]
-		for x in range(0, len(args), 2):
-			option = hf.argInOption(args[x], options)
-			if option and args[x+1]:
-				options[args[x]](args[x + 1])
+		files = hf.open_file([sys.argv[1], sys.argv[2], sys.argv[3]])
+		preprocess(files['taxa'], files['cogs'], files['strings'])

@@ -1,9 +1,11 @@
 from datetime import datetime
-import os
+from pyelasticsearch import ElasticSearch
 import sys
 
 from lib import HelperFunctions as hf
 from lib.algorithm import Algorithm
+
+es = ElasticSearch()
 
 
 def runAlgorithm(family):
@@ -47,24 +49,30 @@ def runForType(familyType):
 	print('*** Total runtime for family type {} was  {} ***'.format(familyType, datetime.now() - start))
 
 
-options = {
-	'-f': runAlgorithm,
-	'-t': runForType
-}
+def run():
+	count = es.count({
+		'query': {
+			'match_all': {}
+		}
+	})
+
+	all_string = []
+	for i in range(0, count['count'], 10000):
+		all_string = sum([all_string, (es.search({
+			"query": {
+				"match_all": {}
+			},
+			"size": 10000,
+			"from": 0
+		}, index='strings', size=10000))['hits']['hits']], [])
+
+	print all_string[0]
+	for i in range(len(all_string)):
+		words = all_string[i]['_source']['words']
+		all_string['']
+		for j in range(len(words)):
+			set(combinations(all_string[i]['_source']['words'], ))
+
 
 if __name__ == "__main__":
-	if len(sys.argv) < 3:
-		print('Not enough arguments!')
-
-	else:
-		try:
-			os.mkdir(sys.argv[1])
-			print('{} directory created'.format(sys.argv[1]))
-
-		except WindowsError:
-			print('{} directory already exists'.format(sys.argv[1]))
-
-		args = sys.argv[2:]
-		option = hf.argInOption(args[0], options)
-		if option and args[1]:
-			options[args[0]](args[1])
+	run()
